@@ -1,2 +1,3 @@
-# skylake
+# Skylake
+
 A light JavaScript library.
