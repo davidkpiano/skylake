@@ -9,15 +9,15 @@ const span    = S.Geb.tag('span')
 S.Geb = (function () {
     const doc = document
 
-    const id = (elementName) => {
+    const id = elementName => {
         return doc.getElementById(elementName)
     }
 
-    const className = (elementName) => {
+    const className = elementName => {
         return doc.getElementsByClassName(elementName)
     }
 
-    const tag = (elementName) => {
+    const tag = elementName => {
         return doc.getElementsByTagName(elementName)
     }
 

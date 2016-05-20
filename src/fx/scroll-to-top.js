@@ -11,7 +11,7 @@ S.ScrollToTop(options)
 
 */
 
-S.ScrollToTop = (options) => {
+S.ScrollToTop = options => {
     const opts            = options
     const defaultScrolled = S.Detect.defaultScrolled()
     const currentPosition = defaultScrolled.scrollTop

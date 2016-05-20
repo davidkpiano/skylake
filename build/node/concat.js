@@ -35,7 +35,7 @@ const dist = 'skylake.js'
 
 const encoding = 'utf-8'
 
-const src = srcArr.map((value) => {
+const src = srcArr.map(value => {
     return fs.readFileSync(value, encoding)
 }).join('\n')
 

@@ -22,7 +22,7 @@ EXPLOITATION CSS
 
 */
 
-S.AnimatedLine = (options) => {
+S.AnimatedLine = options => {
     const opts = options
     const paths = S.Geb.class(opts.pathsClass)
     const pathsL = paths.length

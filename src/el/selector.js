@@ -7,7 +7,7 @@ const name = S.Selector.name(selector)
 */
 
 S.Selector = (function () {
-    const el = (selector) => {
+    const el = selector => {
         const firstChar = selector.charAt(0)
         const elementName = selector.substring(1)
         let selectorElement
@@ -21,7 +21,7 @@ S.Selector = (function () {
         return selectorElement
     }
 
-    const type = (selector) => {
+    const type = selector => {
         const firstChar = selector.charAt(0)
         let selectorType
 
@@ -34,7 +34,7 @@ S.Selector = (function () {
         return selectorType
     }
 
-    const name = (selector) => {
+    const name = selector => {
         const selectorName = selector.substring(1)
 
         return selectorName

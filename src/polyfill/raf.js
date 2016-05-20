@@ -20,7 +20,7 @@ S.Polyfill.raf = () => {
     }
 
     if (!window.cancelAnimationFrame) {
-        window.cancelAnimationFrame = (id) => {
+        window.cancelAnimationFrame = id => {
             clearTimeout(id)
         }
     }

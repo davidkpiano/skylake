@@ -9,7 +9,7 @@ const rl = Readline.createInterface({
     input: process.stdin,
     output: process.stdout
 })
-rl.question(question, (version) => {
+rl.question(question, version => {
     updatePackage(version)
     addSignature(version)
     rl.close()
@@ -18,7 +18,7 @@ rl.question(question, (version) => {
 function updatePackage (version) {
     PackageJson.version = version
 
-    fs.writeFile(PackageFile, JSON.stringify(PackageJson, null, 4), function (err) {
+    fs.writeFile(PackageFile, JSON.stringify(PackageJson, null, 4), err => {
         if (err) {
             console.log(err)
         }

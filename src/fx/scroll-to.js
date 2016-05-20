@@ -14,7 +14,7 @@ S.ScrollTo(options)
 
 */
 
-S.ScrollTo = (options) => {
+S.ScrollTo = options => {
     // const isFirefox = navigator.userAgent.indexOf('Firefox') > -1
     // let debug
     // if(isFirefox && document.documentElement.scrollTop === 0) {
