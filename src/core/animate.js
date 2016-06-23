@@ -12,7 +12,7 @@ const animate1 = new S.Animate({
 animate1.init()
 
 const animate2 = new S.Animate({
-    element: polygonWrap,
+    element: myElement,
     parameter: 'y3d',
     start: 100,
     end: 0,
