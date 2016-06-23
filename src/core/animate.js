@@ -1,17 +1,31 @@
 /*
 
-const animate = new S.Animate({
+const animate1 = new S.Animate({
     element: myElement,
     parameter: 'x',
     start: myCurrentElementPosition,
     end: 100,
-    easing: 'Power4InOut',
+    easing: 'Power5Out',
     duration: 500,
-    during: false,    // Example : elements needs to move during scroll
-    callback: false
+    during: true    // Example : elements needs to move during scroll
 })
+animate1.init()
 
-animate.init()
+const animate2 = new S.Animate({
+    element: polygonWrap,
+    parameter: 'y3d',
+    start: 100,
+    end: 0,
+    pixel: false,
+    easing: 'Power4InOut',
+    duration: 2000,
+    callback: getRAF,
+    delay: {
+        before: 500,
+        after: 600
+    }
+})
+animate2.init()
 
 */
 
@@ -21,6 +35,8 @@ S.Animate = class {
         this.opts = options
         this.distance = this.opts.end - this.opts.start
         this.Easing = S.Easing
+        this.delayBefore = this.opts.delay ? this.opts.delay.before : false
+        this.delayAfter = this.opts.delay ? this.opts.delay.after : false
 
         this.raf = new S.RafIndex()
 
@@ -29,6 +45,10 @@ S.Animate = class {
             case 'y':
                 this.getUpdate = this.attributUpdate
                 break
+            case 'x3d':
+            case 'y3d':
+                this.getUpdate = this.translate3dUpdate
+                break
             case 'scrollTop':
                 this.getUpdate = this.scrollTopUpdate
                 break
@@ -36,12 +56,16 @@ S.Animate = class {
                 this.getUpdate = this.styleUpdate
         }
 
-        S.BindMaker(this, ['loop'])
+        S.BindMaker(this, ['start', 'loop'])
     }
 
     init () {
-        this.startTime = S.Win.perfNow()
+        const delay = this.delayBefore ? this.delayBefore : 0
+        S.Delay(this.start, delay)
+    }
 
+    start () {
+        this.startTime = S.Win.perfNow()
         this.raf.start(this.loop)
     }
 
@@ -50,8 +74,7 @@ S.Animate = class {
         const multiplier       = (currentTime - this.startTime) / this.opts.duration
         const multiplierT      = multiplier > 1 ? 1 : multiplier // T → ternary
         const easingMultiplier = this.Easing[this.opts.easing](multiplierT)
-
-        const update = this.opts.start + this.distance * easingMultiplier // Lerp → linear interpolation
+        const update           = this.opts.start + this.distance * easingMultiplier // Lerp → linear interpolation
 
         this.getUpdate(update)
 
@@ -61,7 +84,8 @@ S.Animate = class {
             this.raf.cancel()
             this.getUpdate(this.opts.end)
             if (this.opts.callback) {
-                this.opts.callback()
+                const delay = this.delayAfter ? this.delayAfter : 0
+                S.Delay(this.opts.callback, delay)
             }
         }
     }
@@ -76,6 +100,16 @@ S.Animate = class {
         if (this.opts.during) {
             this.opts.during(update)
         }
+    }
+
+    translate3dUpdate (update) {
+        const value = this.opts.pixel ? update + 'px' : update + '%'
+        const translate = this.opts.parameter === 'x3d' ? value + ',0' : '0,' + value
+        const translate3d = 'translate3d(' + translate + ',0)'
+        const elStyle = this.opts.element.style
+
+        elStyle.webkitTransform = translate3d
+        elStyle.transform = translate3d
     }
 
     styleUpdate (update) {

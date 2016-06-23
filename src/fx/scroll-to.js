@@ -1,6 +1,6 @@
 /*
 
-►►►  during   →   Elements needs to move during scroll (ex: my portfolio)
+►►►  during   →   Elements needs to move during scroll
 
 const options = {
     destination: 1000,

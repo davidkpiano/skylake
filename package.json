@@ -1,6 +1,6 @@
 {
     "name": "skylake",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "A light JavaScript library.",
     "author": "Aristide Benoist",
     "license": "MIT",
@@ -20,8 +20,8 @@
     },
     "devDependencies": {
         "babel-preset-es2015-rollup": "^1.1.1",
-        "rollup": "^0.26.3",
-        "rollup-plugin-babel": "^2.4.0",
+        "rollup": "^0.32.0",
+        "rollup-plugin-babel": "^2.5.1",
         "rollup-plugin-uglify": "^0.3.1"
     },
     "scripts": {
