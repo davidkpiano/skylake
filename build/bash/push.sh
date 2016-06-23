@@ -7,4 +7,5 @@ PACKAGE_VERSION=$(cat package.json \
   | tr -d '[[:space:]]')
 git add --all
 git commit -m "$PACKAGE_VERSION"
-git push git@github.com:ariiiman/skylake.git
+#git push git@github.com:ariiiman/skylake.git
+git push --set-upstream git@github.com:ariiiman/skylake.git master
