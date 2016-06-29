@@ -10,6 +10,15 @@ S.AnimatedLine({
     callback: false
 })
 
+OR
+
+AnimatedLine({
+    pathsClass: 'pathClassName',
+    duration: 800,
+    easing: 'Power4InOut',
+    reverse: true
+})
+
 EXPLOITATION CSS
 ────────────────
 
@@ -32,16 +41,18 @@ S.AnimatedLine = options => {
     }
 
     function animationLine (path) {
-        const start = path.getTotalLength()
+        const pathLength = path.getTotalLength()
+        const start = opts.reverse ? 0 : pathLength
+        const end = opts.reverse ? pathLength : 0
 
-        path.style.strokeDasharray = start
+        path.style.strokeDasharray = pathLength
         path.style.opacity = 1
 
         const animate = new S.Animate({
             element: path,
             parameter: 'strokeDashoffset',
             start: start,
-            end: 0,
+            end: end,
             easing: opts.easing,
             duration: opts.duration,
             callback: opts.callback
