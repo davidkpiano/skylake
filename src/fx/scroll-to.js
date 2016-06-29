@@ -29,16 +29,7 @@ S.ScrollTo = options => {
     const opts            = options
     const defaultScrolled = S.Detect.defaultScrolled()
     const initialPosition = defaultScrolled.scrollTop
-    const animate         = new S.Animate({
-        element: defaultScrolled,
-        parameter: 'scrollTop',
-        start: initialPosition,
-        end: opts.destination,
-        easing: opts.easing,
-        duration: opts.duration,
-        during: opts.during,
-        callback: getCallback
-    })
+    const animate         = new S.Animate(defaultScrolled, 'scrollTop', initialPosition, opts.destination, opts.easing, opts.duration, {callback: getCallback, during: opts.during})
 
     if (opts.destination === initialPosition) {
         getCallback()

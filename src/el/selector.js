@@ -10,34 +10,26 @@ S.Selector = (function () {
     const el = selector => {
         const firstChar = selector.charAt(0)
         const elementName = selector.substring(1)
-        let selectorElement
 
         if (firstChar === '#') {
-            selectorElement = S.Geb.id(elementName)
+            return S.Geb.id(elementName)
         } else {
-            selectorElement = S.Geb.class(elementName)
+            return S.Geb.class(elementName)
         }
-
-        return selectorElement
     }
 
     const type = selector => {
         const firstChar = selector.charAt(0)
-        let selectorType
 
         if (firstChar === '#') {
-            selectorType = 'id'
+            return 'id'
         } else {
-            selectorType = 'class'
+            return 'class'
         }
-
-        return selectorType
     }
 
     const name = selector => {
-        const selectorName = selector.substring(1)
-
-        return selectorName
+        return selector.substring(1)
     }
 
     return {

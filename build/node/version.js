@@ -3,15 +3,15 @@ const PackageFile = 'package.json'
 const PackageJson = require('../../' + PackageFile)
 const Readline    = require('readline')
 
-// Get package.json version
 const question = 'Current version : ' + PackageJson.version + '\nNew version ? '
 const rl = Readline.createInterface({
     input: process.stdin,
     output: process.stdout
 })
 rl.question(question, version => {
-    updatePackage(version)
-    addSignature(version)
+    const futureVersion = version === 'n' ? PackageJson.version : version
+    updatePackage(futureVersion)
+    addSignature(futureVersion)
     rl.close()
 })
 
