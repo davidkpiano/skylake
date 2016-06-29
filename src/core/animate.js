@@ -111,7 +111,7 @@ S.Animate = class {
 
     t3dUpdate (update) {
         const value = this.isString(this.start) ? update + 'px' : update + '%'
-        const translate = this.param === 'x3d' ? value + ',0' : '0,' + value
+        const translate = this.param === '3dx' ? value + ',0' : '0,' + value
         const translate3d = 'translate3d(' + translate + ',0)'
 
         this.letsRock('transform', 'transform', translate3d)
