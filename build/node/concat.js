@@ -28,6 +28,7 @@ const srcArr = [
     'src/raf/raf-index.js',
     'src/raf/raf-ticking.js',
     'src/window/win.js',
+    'src/xhr/controller.js',
     'src/xhr/on-popstate.js'
 ]
 
