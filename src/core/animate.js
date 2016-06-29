@@ -38,7 +38,7 @@ S.Animate = class {
         this.duration = duration
         this._opts = options || false
 
-        this.distance = this.end - this.start
+        this.distance = +this.end - +this.start
         this.delayBefore = this._opts.delay ? this._opts.delay.before : false
         this.delayAfter = this._opts.delay ? this._opts.delay.after : false
 
@@ -81,7 +81,7 @@ S.Animate = class {
         const multiplier       = (currentTime - this.startTime) / this.duration
         const multiplierT      = multiplier > 1 ? 1 : multiplier // T → ternary
         const easingMultiplier = this.EasingLibrary[this.easing](multiplierT)
-        const update           = this.start + this.distance * easingMultiplier // Lerp → linear interpolation
+        const update           = +this.start + this.distance * easingMultiplier // Lerp → linear interpolation
 
         this.getUpdate(update)
 
