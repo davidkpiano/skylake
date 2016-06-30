@@ -6,6 +6,7 @@ const srcArr = [
     'src/core/bind-maker.js',
     'src/core/delay.js',
     'src/core/easing.js',
+    'src/core/is.js',
     'src/core/throttle.js',
     'src/el/geb.js', // Must be before 'dom'
     'src/el/dom.js', // Must be before 'detect'

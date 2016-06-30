@@ -42,7 +42,7 @@ S.Animate = class {
         this.delayBefore = this._opts.delay ? this._opts.delay.before : false
         this.delayAfter = this._opts.delay ? this._opts.delay.after : false
 
-        this.getElement(element)
+        this.processingEl(element)
 
         this.EasingLibrary = S.Easing
         this.raf = new S.RafIndex()
@@ -110,7 +110,7 @@ S.Animate = class {
     }
 
     t3dUpdate (update) {
-        const value = this.isString(this.start) ? update + 'px' : update + '%'
+        const value = S.Is.string(this.start) ? update + 'px' : update + '%'
         const translate = this.param === '3dx' ? value + ',0' : '0,' + value
         const translate3d = 'translate3d(' + translate + ',0)'
 
@@ -138,12 +138,15 @@ S.Animate = class {
         }
     }
 
-    getElement (element) {
-        this.el = this.isString(element) ? S.Selector.el(element) : element
-        this.multiple = this.isString(element) ? (S.Selector.type(element) === 'class') : false
+    processingEl (element) {
+        if (S.Is.string(element)) {
+            this.el = S.Selector.el(element)
+            this.multiple = S.Selector.type(element) === 'class'
+        } else {
+            this.el = element
+            // this.multiple = S.Is.nodeList(this.el)
+            this.multiple = false
+        }
     }
 
-    isString (varToCheck) {
-        return typeof varToCheck === 'string'
-    }
 }
