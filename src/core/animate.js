@@ -183,7 +183,7 @@ S.Animate = class {
             if (type === 'setAttribut') {
                 el.setAttribute(param, update)
             } else {
-                el.style[param] = update + ';'
+                el.style[param] = update
             }
         }
     }
