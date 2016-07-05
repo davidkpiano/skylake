@@ -21,15 +21,15 @@ S.ScrollTo = options => {
     //     document.documentElement.scrollTop = 1;
     //     debug = true;
     // }
-    // this.defaultScrolled = document.documentElement.scrollTop ? document.documentElement : document.body;
+    // this.scrollable = document.documentElement.scrollTop ? document.documentElement : document.body;
     // if(debug) {
     //     document.documentElement.scrollTop = 0;
     // }
 
     const opts            = options
-    const defaultScrolled = S.Detect.defaultScrolled()
-    const initialPosition = defaultScrolled.scrollTop
-    const animate         = new S.Animate(defaultScrolled, 'scrollTop', initialPosition, opts.destination, opts.easing, opts.duration, {callback: getCallback, during: opts.during})
+    const scrollable      = S.Scrollable
+    const initialPosition = scrollable.scrollTop
+    const animate         = new S.Animate(scrollable, 'scrollTop', initialPosition, opts.destination, opts.easing, opts.duration, {callback: getCallback, during: opts.during})
 
     if (opts.destination === initialPosition) {
         getCallback()

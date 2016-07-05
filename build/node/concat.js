@@ -4,13 +4,14 @@ const srcArr = [
     'src/base/s.js',
     'src/core/animate.js',
     'src/core/bind-maker.js',
+    'src/core/browser.js',
     'src/core/delay.js',
     'src/core/easing.js',
     'src/core/is.js',
     'src/core/throttle.js',
     'src/el/geb.js', // Must be before 'dom'
     'src/el/dom.js', // Must be before 'detect'
-    'src/core/detect.js',
+    'src/core/scrollable.js', // Must be after 'dom'
     'src/el/selector.js',
     'src/event/mm.js',
     'src/event/ro.js',

@@ -6,24 +6,24 @@ const span    = S.Geb.tag('span')
 
 */
 
-S.Geb = (function () {
-    const doc = document
+const Geb = class {
 
-    const id = elementName => {
-        return doc.getElementById(elementName)
+    constructor () {
+        this.doc = document
     }
 
-    const className = elementName => {
-        return doc.getElementsByClassName(elementName)
+    id (elementName) {
+        return this.doc.getElementById(elementName)
     }
 
-    const tag = elementName => {
-        return doc.getElementsByTagName(elementName)
+    class (elementName) {
+        return this.doc.getElementsByClassName(elementName)
     }
 
-    return {
-        id: id,
-        class: className,
-        tag: tag
+    tag (elementName) {
+        return this.doc.getElementsByTagName(elementName)
     }
-}())
+
+}
+
+S.Geb = new Geb()

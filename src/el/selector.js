@@ -6,35 +6,29 @@ const name = S.Selector.name(selector)
 
 */
 
-S.Selector = (function () {
-    const el = selector => {
-        const firstChar = selector.charAt(0)
-        const elementName = selector.substring(1)
+const Selector = class {
 
-        if (firstChar === '#') {
+    el (selector) {
+        const elementName = selector.substring(1)
+        if (selector.charAt(0) === '#') {
             return S.Geb.id(elementName)
         } else {
             return S.Geb.class(elementName)
         }
     }
 
-    const type = selector => {
-        const firstChar = selector.charAt(0)
-
-        if (firstChar === '#') {
+    type (selector) {
+        if (selector.charAt(0) === '#') {
             return 'id'
         } else {
             return 'class'
         }
     }
 
-    const name = selector => {
+    name (selector) {
         return selector.substring(1)
     }
 
-    return {
-        el: el,
-        type: type,
-        name: name
-    }
-}())
+}
+
+S.Selector = new Selector()

@@ -1,19 +1,24 @@
 /*
 
-S.Is.string(varToCheck)
-S.Is.nodeList(nodes)
+const isTouch = S.Is.touch
+const isString = S.Is.string(varToCheck)
 
 */
 
-S.Is = (function () {
-    const string = varToCheck => {
+const Is = class {
+
+    get touch () {
+        return 'ontouchend' in window
+    }
+
+    string (varToCheck) {
         return typeof varToCheck === 'string'
     }
 
 /*
     DISABLE → BUG WITH ROLLUP
 
-    const nodeList = nodes => {
+    nodeList (nodes) {
         const sdc = Object.prototype.toString.call(nodes)
 
         return typeof nodes === 'object' &&
@@ -23,8 +28,6 @@ S.Is = (function () {
     }
 */
 
-    return {
-        string: string/*,
-        nodeList: nodeList*/
-    }
-}())
+}
+
+S.Is = new Is()
