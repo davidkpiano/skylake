@@ -21,7 +21,7 @@ S.Scroll = class {
 
     constructor (options) {
         this.opts = options
-        this.defaultScrolled = S.Detect.defaultScrolled()
+        this.scrollable = S.Scrollable
 
         S.BindMaker(this, ['getThrottle', 'getRAF', 'run'])
 
@@ -34,7 +34,7 @@ S.Scroll = class {
     }
 
     on () {
-        this.startScrollY = this.defaultScrolled.scrollTop
+        this.startScrollY = this.scrollable.scrollTop
 
         this.listeners('add')
     }
@@ -56,7 +56,7 @@ S.Scroll = class {
     }
 
     run () {
-        const currentScrollY = this.defaultScrolled.scrollTop
+        const currentScrollY = this.scrollable.scrollTop
         const delta          = -(currentScrollY - this.startScrollY)
 
         // Reset start scroll y

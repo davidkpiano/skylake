@@ -13,7 +13,7 @@ S.Listen = (element, action, type, callback) => {
     if (type === 'mouseWheel') {
         listenType = 'onwheel' in doc ? 'wheel' : doc.onmousewheel !== undefined ? 'mousewheel' : 'DOMMouseScroll'
     } else if (type === 'focusOut') {
-        listenType = S.Detect.isFirefox ? 'blur' : 'focusout'
+        listenType = S.Browser.isFirefox ? 'blur' : 'focusout'
     } else {
         listenType = type
     }

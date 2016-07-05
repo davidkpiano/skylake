@@ -17,7 +17,7 @@ S.RO = class {
 
     constructor (options) {
         this.opts = options
-        this.isTouch = S.Detect.isTouch
+        this.isTouch = S.Is.touch
 
         S.BindMaker(this, ['getThrottle', 'getRAF'])
 

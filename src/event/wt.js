@@ -17,7 +17,7 @@ S.WT = class EventWT {
 
     constructor (callback) {
         this.callback = callback
-        this.isTouch = S.Detect.isTouch
+        this.isTouch = S.Is.touch
 
         this.rafTicking = new S.RafTicking()
 
@@ -70,7 +70,7 @@ S.WT = class EventWT {
 
         // deltamode = 1 -> wheel mouse, not touch pad
         // https://developer.mozilla.org/en-US/docs/Web/API/WheelEvent#Delta_modes
-        if (S.Detect.isFirefox && this.event.deltaMode === 1) {
+        if (S.Browser.isFirefox && this.event.deltaMode === 1) {
             this.delta *= 40 // Firefox multiplicateur
         }
 
