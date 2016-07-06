@@ -15,7 +15,7 @@ S.WTDisable = (function () {
     }
 
     function listeners (action) {
-        const isTouch = S.Is.touch
+        const isTouch = S.Detect.isTouch
         const doc     = document
 
         if (isTouch) {

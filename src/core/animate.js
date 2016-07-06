@@ -133,9 +133,9 @@ S.Animate = class {
 
         for (let i = 0; i < this.updateQty; i++) {
             if (this.param[i] === '3dx') {
-                t3dx = S.Is.string(this.start[i]) ? update[i] + 'px' : update[i] + '%'
+                t3dx = S.Detect.isString(this.start[i]) ? update[i] + 'px' : update[i] + '%'
             } else if (this.param[i] === '3dy') {
-                t3dy = S.Is.string(this.start[i]) ? update[i] + 'px' : update[i] + '%'
+                t3dy = S.Detect.isString(this.start[i]) ? update[i] + 'px' : update[i] + '%'
             } else if (this.param[i] === 'rotate') {
                 rotate = 'rotate(' + update[i] + 'deg)'
             }
@@ -160,7 +160,7 @@ S.Animate = class {
     }
 
     t3dUpdate (update) {
-        const value = S.Is.string(this.start) ? update + 'px' : update + '%'
+        const value = S.Detect.isString(this.start) ? update + 'px' : update + '%'
         const translate = this.param === '3dx' ? value + ',0' : '0,' + value
         const translate3d = 'translate3d(' + translate + ',0)'
 
@@ -189,12 +189,12 @@ S.Animate = class {
     }
 
     processingEl (element) {
-        if (S.Is.string(element)) {
+        if (S.Detect.isString(element)) {
             this.el = S.Selector.el(element)
             this.multiple = S.Selector.type(element) === 'class'
         } else {
             this.el = element
-            // this.multiple = S.Is.nodeList(this.el)
+            // this.multiple = S.Detect.isNodeList(this.el)
             this.multiple = false
         }
     }

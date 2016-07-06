@@ -7,5 +7,5 @@ S.ScrollZero()
 */
 
 S.ScrollZero = () => {
-    S.Scrollable.scrollTop = 0
+    S.Detect.scrollable.scrollTop = 0
 }

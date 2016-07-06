@@ -13,7 +13,7 @@ S.ScrollToTop(options)
 
 S.ScrollToTop = options => {
     const opts            = options
-    const currentPosition = S.Scrollable.scrollTop
+    const currentPosition = S.Detect.scrollable.scrollTop
     const scrollToOptions = {
         destination: 0,
         duration: getDuration(),

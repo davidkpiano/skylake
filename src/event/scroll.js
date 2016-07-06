@@ -21,7 +21,7 @@ S.Scroll = class {
 
     constructor (options) {
         this.opts = options
-        this.scrollable = S.Scrollable
+        this.scrollable = S.Detect.scrollable
 
         S.BindMaker(this, ['getThrottle', 'getRAF', 'run'])
 

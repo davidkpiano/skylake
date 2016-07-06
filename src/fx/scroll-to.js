@@ -27,7 +27,7 @@ S.ScrollTo = options => {
     // }
 
     const opts            = options
-    const scrollable      = S.Scrollable
+    const scrollable      = S.Detect.scrollable
     const initialPosition = scrollable.scrollTop
     const animate         = new S.Animate(scrollable, 'scrollTop', initialPosition, opts.destination, opts.easing, opts.duration, {callback: getCallback, during: opts.during})
 
