@@ -24,6 +24,6 @@ S.OnPopstate = () => {
     }
 
     window.onpopstate = () => {
-        window.location.href = window.location.pathname
+        window.location.href = S.Win.path
     }
 }

@@ -1,24 +1,32 @@
 /*
 
-const winH = S.Win.h()
-const path = S.Win.path()
+const winH = S.Win.h
+const path = S.Win.path
 
 */
 
-S.Win = {
-    w: () => {
+const Win = class {
+
+    get w () {
         return window.innerWidth
-    },
-    h: () => {
+    }
+
+    get h () {
         return window.innerHeight
-    },
-    path: () => {
+    }
+
+    get path () {
         return window.location.pathname
-    },
-    href: () => {
+    }
+
+    get href () {
         return window.location.href
-    },
-    perfNow: () => {
+    }
+
+    get perfNow () {
         return window.performance.now()
     }
+
 }
+
+S.Win = new Win()

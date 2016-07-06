@@ -4,9 +4,10 @@ const srcArr = [
     'src/base/s.js',
     'src/core/animate.js',
     'src/core/bind-maker.js',
-    'src/core/detect.js',
     'src/core/delay.js',
     'src/core/easing.js',
+    'src/core/is.js',
+    'src/core/sniffer.js',
     'src/core/throttle.js',
     'src/el/geb.js', // Must be before 'dom'
     'src/el/dom.js', // Must be before 'detect'
@@ -17,9 +18,6 @@ const srcArr = [
     'src/event/wt-disable.js',
     'src/event/wt.js',
     'src/fx/animated-line.js',
-    'src/fx/scroll-to-top.js',
-    'src/fx/scroll-to.js',
-    'src/fx/scroll-zero.js',
     'src/listener/auto-transitionend.js',
     'src/listener/listen.js',
     'src/polyfill/perf-now.js',
@@ -27,6 +25,10 @@ const srcArr = [
     'src/raf/raf.js',
     'src/raf/raf-index.js',
     'src/raf/raf-ticking.js',
+    'src/scroll/scroll-to-top.js',
+    'src/scroll/scroll-to.js',
+    'src/scroll/scroll-zero.js',
+    'src/scroll/scrollable.js',
     'src/window/win.js',
     'src/xhr/controller.js',
     'src/xhr/on-popstate.js'

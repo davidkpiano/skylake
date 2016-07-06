@@ -20,7 +20,7 @@ S.Throttle = class {
     }
 
     init () {
-        this.currentTime = S.Win.perfNow()
+        this.currentTime = S.Win.perfNow
 
         if (this.lastTime + this.opts.delay > this.currentTime) {
             clearTimeout(this.timer)
