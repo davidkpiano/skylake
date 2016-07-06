@@ -18,17 +18,17 @@ const Detect = class {
         return this.uA.indexOf('firefox') > -1
     }
 
-    safari () {
+    get safari () {
         return this.uA.match(/version\/[\d\.]+.*safari/)
     }
 
     get isSafari () {
-        return !!this.safari()
+        return !!this.safari
     }
 
     get browserVersion () {
         if (this.isSafari) {
-            const versionWithVersion = safari[0].match(/version\/\d{1,2}/)
+            const versionWithVersion = this.safari[0].match(/version\/\d{1,2}/)
             return +versionWithVersion[0].split('/')[1]
         } else {
             // TODO : others
