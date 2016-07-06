@@ -28,8 +28,8 @@ const Detect = class {
 
     get browserVersion () {
         if (this.isSafari) {
-            const fullVersion = this.safari()[0].match(/\d{1,2}\.\d{1,2}\.\d{1,2}/)
-            return +fullVersion[0].split('.')[0]
+            const versionWithVersion = safari[0].match(/version\/\d{1,2}/)
+            return +versionWithVersion[0].split('/')[1]
         } else {
             // TODO : others
             return false
