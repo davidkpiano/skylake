@@ -29,6 +29,7 @@ const srcArr = [
     'src/scroll/scroll-to.js',
     'src/scroll/scroll-zero.js',
     'src/scroll/scrollable.js',
+    'src/scroll/top-when-refresh.js',
     'src/window/win.js',
     'src/xhr/controller.js',
     'src/xhr/on-popstate.js'
