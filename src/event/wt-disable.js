@@ -6,11 +6,11 @@ S.WTDisable.off()
 */
 
 S.WTDisable = (function () {
-    const on = () => {
+    const on = _ => {
         listeners('add')
     }
 
-    const off = () => {
+    const off = _ => {
         listeners('remove')
     }
 

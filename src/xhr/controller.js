@@ -13,20 +13,20 @@ function myCallback(response, args) {
 
 S.Controller = (page, callback, args) => {
     const path = 'index.php?url=' + page + '&xhr=true'
-    const req = new XMLHttpRequest()
+    const xhr = new XMLHttpRequest()
 
-    req.open('GET', path, true)
+    xhr.open('GET', path, true)
 
-    req.onreadystatechange = function () {
-        if (req.readyState === 4 && req.status === 200) {
-            const xhrController = JSON.parse(req.responseText).xhrController
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            const xhrController = JSON.parse(xhr.responseText).xhrController
 
             getHeadUpdate(xhrController)
             getHistoryUpdate()
             callback(xhrController.view, args)
         }
     }
-    req.send(null)
+    xhr.send(null)
 
     // Head update
     function getHeadUpdate (xhrController) {

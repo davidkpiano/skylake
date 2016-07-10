@@ -4,14 +4,14 @@ S.OnPopstate()
 
 */
 
-S.OnPopstate = () => {
+S.OnPopstate = _ => {
     let blockPopstateEvent = document.readyState !== 'complete'
 
     S.Listen(window, 'add', 'load', load)
     S.Listen(window, 'add', 'popstate', popstate)
 
     function load () {
-        S.Delay(() => {
+        S.Delay(_ => {
             blockPopstateEvent = false
         }, 0)
     }
@@ -23,7 +23,7 @@ S.OnPopstate = () => {
         }
     }
 
-    window.onpopstate = () => {
+    window.onpopstate = _ => {
         window.location.href = S.Win.path
     }
 }

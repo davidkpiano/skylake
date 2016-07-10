@@ -4,14 +4,14 @@ S.Polyfill.raf()
 
 */
 
-S.Polyfill.raf = () => {
+S.Polyfill.raf = _ => {
     let lastTime = 0
 
     if (!window.requestAnimationFrame) {
         window.requestAnimationFrame = function (callback) {
             let currentTime = new Date().getTime()
             let timeToCall = Math.max(0, 16 - (currentTime - lastTime))
-            let id = S.Delay(() => {
+            let id = S.Delay(_ => {
                 callback(currentTime + timeToCall)
             }, timeToCall)
             lastTime = currentTime + timeToCall

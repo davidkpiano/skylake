@@ -24,7 +24,7 @@ S.Throttle = class {
 
         if (this.lastTime + this.opts.delay > this.currentTime) {
             clearTimeout(this.timer)
-            this.timer = S.Delay(() => {
+            this.timer = S.Delay(_ => {
                 this.opts.callback()
                 this.timeReset()
             }, this.opts.delay)

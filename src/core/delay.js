@@ -5,7 +5,7 @@ S.Delay(callback, delay)
 */
 
 S.Delay = (callback, delay) => {
-    window.setTimeout(() => {
+    window.setTimeout(_ => {
         callback()
     }, delay)
 }

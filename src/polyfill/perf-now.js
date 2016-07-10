@@ -4,7 +4,7 @@ S.Polyfill.perfNow()
 
 */
 
-S.Polyfill.perfNow = () => {
+S.Polyfill.perfNow = _ => {
     if (!('performance' in window)) {
         window.performance = {}
     }
