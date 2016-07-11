@@ -2,7 +2,8 @@ const fs = require('fs')
 
 const srcArr = [
     'src/base/s.js',
-    'src/core/animate.js',
+    'src/animate/animate.js',
+    'src/animate/timeline.js',
     'src/core/bind-maker.js',
     'src/core/delay.js',
     'src/core/easing.js',
