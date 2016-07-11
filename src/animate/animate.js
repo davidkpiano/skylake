@@ -9,8 +9,12 @@ for animate elements with class :
 ►►►  for all   →   '.myClass'
 
 For 3dx & 3dy properties :
-►►►  string   →  px
-►►►  int      →  %
+►►►  string   →   px
+►►►  int      →   %
+
+Delay :
+►►►  before   →   int
+►►►  after    →   int
 
 During example :
 ►►►  elements needs to move during scroll
@@ -24,7 +28,7 @@ a1.go()
 const a2 = new S.Animate(domElement, 'opacity', 1, 0, 'linear', 1000, {callback: myCallback})
 a2.go()
 
-const a3 = new S.Animate('#id', '3dx', '0', '100', 'linear', 1000, {delay: {before: 500, after: 500}, callback: callback, during: duringCallback})
+const a3 = new S.Animate('#id', '3dx', '0', '100', 'linear', 1000, {before: 500, after: 500, callback: callback, during: duringCallback})
 a3.go()
 
 const a4 = new S.Animate('#id', ['rotate', '3dy'], [0, '0'], [-45, '-6'], 'Power4Out', 450)
@@ -34,18 +38,18 @@ a4.go()
 
 S.Animate = class {
 
-    constructor () {
-        const args = arguments[0]
-        this.element = args[0]
-        this.prop = args[1]
-        this.start = args[2]
-        this.end = args[3]
-        this.easing = args[4]
-        this.duration = args[5]
-        this._opts = args[6] || false
+    constructor (element, prop, start, end, easing, duration, otps) {
+        const args = arguments
+        this.element = element
+        this.prop = prop
+        this.start = start
+        this.end = end
+        this.easing = easing
+        this.duration = duration
+        this._opts = otps || false
 
-        this.delayBefore = this._opts.delay ? this._opts.delay.before : false
-        this.delayAfter = this._opts.delay ? this._opts.delay.after : false
+        this.before = this._opts.before ? this._opts.before : 0
+        this.after = this._opts.after ? this._opts.after : 0
 
         this.processingEl()
 
@@ -58,8 +62,7 @@ S.Animate = class {
     }
 
     go () {
-        const delay = this.delayBefore ? this.delayBefore : 0
-        S.Delay(this.getRaf, delay)
+        S.Delay(this.getRaf, this.before)
     }
 
     getRaf () {
@@ -92,8 +95,7 @@ S.Animate = class {
             this.raf.cancel()
             this.update(this.end)
             if (this._opts.callback) {
-                const delay = this.delayAfter ? this.delayAfter : 0
-                S.Delay(this._opts.callback, delay)
+                S.Delay(this._opts.callback, this.after)
             }
         }
     }
