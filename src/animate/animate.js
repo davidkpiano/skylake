@@ -8,7 +8,7 @@ for animate elements with class :
 ►►►  for one   →   passing dom element
 ►►►  for all   →   '.myClass'
 
-For 3dx & 3dy propeters :
+For 3dx & 3dy properties :
 ►►►  string   →  px
 ►►►  int      →  %
 
