@@ -18,7 +18,12 @@ S.Timeline = class {
 
     from () {
         if (this.contentL > 0) {
-            arguments[6].before = this.content[this.contentL - 1].before + arguments[6].before
+            const prevBefore = this.content[this.contentL - 1].before
+            if (arguments[6] && arguments[6].before) {
+                arguments[6].before = prevBefore + arguments[6].before
+            } else {
+                [].push.call(arguments, {before: prevBefore})
+            }
         }
 
         this.content.push(new S.Animate(...arguments))
