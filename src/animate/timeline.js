@@ -21,6 +21,8 @@ S.Timeline = class {
             const prevBefore = this.content[this.contentL - 1].before
             if (arguments[6] && arguments[6].before) {
                 arguments[6].before = prevBefore + arguments[6].before
+            } else if (arguments[6]) {
+                arguments[6].before = prevBefore
             } else {
                 [].push.call(arguments, {before: prevBefore})
             }
