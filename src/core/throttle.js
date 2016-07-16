@@ -3,7 +3,7 @@
 const throttle = new S.Throttle({
     callback: callback,
     delay: 200
-    endOnly: true
+    atEnd: true
 })
 
 throttle.init()
@@ -13,30 +13,34 @@ throttle.init()
 S.Throttle = class {
 
     constructor (options) {
-        this.currentTime = 0
-        this.lastTime = 0
-        this.timer
+        this.timeout = false
+        this.timer = 0
         this.opts = options
+
+        S.BindMaker(this, ['resize'])
     }
 
     init () {
-        this.currentTime = S.Win.perfNow
+        this.startTime = S.Win.perfNow
 
-        if (this.lastTime + this.opts.delay > this.currentTime) {
-            clearTimeout(this.timer)
-            this.timer = S.Delay(_ => {
-                this.opts.callback()
-                this.timeReset()
-            }, this.opts.delay)
-        } else {
-            if (!this.opts.endOnly) {
-                this.opts.callback()
-            }
-            this.timeReset()
+        if (!this.timeout) {
+            this.timeout = true
+            S.Delay(this.resize, this.opts.delay)
         }
     }
 
-    timeReset () {
-        this.lastTime = this.currentTime
+    resize () {
+        const currentTime = S.Win.perfNow
+
+        if (currentTime - this.startTime < this.opts.delay) {
+            this.timer = S.Delay(this.resize, this.opts.delay)
+            if (!this.opts.atEnd) {
+                this.opts.callback()
+            }
+        } else {
+            clearTimeout(this.timer)
+            this.timeout = false
+            this.opts.callback()
+        }
     }
 }
