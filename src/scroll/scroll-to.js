@@ -15,17 +15,6 @@ S.ScrollTo(options)
 */
 
 S.ScrollTo = options => {
-    // const isFirefox = navigator.userAgent.indexOf('Firefox') > -1
-    // let debug
-    // if(isFirefox && document.documentElement.scrollTop === 0) {
-    //     document.documentElement.scrollTop = 1;
-    //     debug = true;
-    // }
-    // this.scrollable = document.documentElement.scrollTop ? document.documentElement : document.body;
-    // if(debug) {
-    //     document.documentElement.scrollTop = 0;
-    // }
-
     const opts            = options
     const scrollable      = S.Scrollable
     const initialPosition = scrollable.scrollTop
