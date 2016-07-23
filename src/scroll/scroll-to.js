@@ -35,7 +35,7 @@ S.ScrollTo = options => {
         getCallback()
     } else {
         S.WTDisable.on()
-        animate.init()
+        animate.go()
     }
 
     function getCallback () {

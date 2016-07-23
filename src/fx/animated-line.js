@@ -49,6 +49,6 @@ S.AnimatedLine = options => {
         path.style.opacity = 1
 
         const animate = new S.Animate(path, 'strokeDashoffset', start, end, opts.easing, opts.duration, {callback: opts.callback})
-        animate.init()
+        animate.go()
     }
 }
