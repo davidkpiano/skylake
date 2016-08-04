@@ -68,9 +68,6 @@ S.AnimatedLine = class {
         const pathLength = path.getTotalLength()
         const start = this.type === 'reverse' ? +path.style.strokeDashoffset : pathLength
         const end = this.type === 'reverse' ? pathLength : 0
-        if (this.type === 'reverse') {
-            console.log(pathLength - (+path.style.strokeDashoffset))
-        }
 
         path.style.strokeDasharray = pathLength
         path.style.opacity = 1
