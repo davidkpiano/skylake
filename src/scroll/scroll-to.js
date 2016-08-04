@@ -18,13 +18,13 @@ S.ScrollTo = options => {
     const opts            = options
     const scrollable      = S.Scrollable
     const initialPosition = scrollable.scrollTop
-    const animate         = new S.Animate(scrollable, 'scrollTop', initialPosition, opts.destination, opts.easing, opts.duration, {callback: getCallback, during: opts.during})
+    const animation       = new S.Merom(scrollable, 'scrollTop', initialPosition, opts.destination, opts.duration, opts.easing, {callback: getCallback, during: opts.during})
 
     if (opts.destination === initialPosition) {
         getCallback()
     } else {
         S.WTDisable.on()
-        animate.go()
+        animation.play()
     }
 
     function getCallback () {

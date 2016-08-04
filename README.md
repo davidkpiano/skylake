@@ -26,7 +26,7 @@ Look at the **src** folder in the github repository for more information
 
     S.Polyfill.perfNow()
 
-### Check if the variable is an object
+### Check if a variable is an object
 
     const isObj = S.Is.object(variable)
 
@@ -37,7 +37,7 @@ Look at the **src** folder in the github repository for more information
     animation.pause('on')
     animation.pause('off')
 
-### Build sequences of Merom
+### Build sequences of Merom with Timeline
 
     const tl = new S.Timeline()
     tl.from('#element-0', '3dy', 0, 100, 1000, 'ExpoOut', {delay: 500})
