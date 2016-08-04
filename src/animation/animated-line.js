@@ -5,8 +5,9 @@ EXPLOITATION JS
 
 ►►►  path    →   '#id' or '.class' or domElement
 
-const animatedLine = new S.AnimatedLine('.paths', 1200, 'ExpoInOut', {reverse: true, callback: false})
-animatedLine.play()
+const animatedLine = new S.AnimatedLine('.paths')
+animatedLine.play(4000, 'Power1InOut', playCallback)
+animatedLine.reverse(1000, 'ExpoInOut', reverseCallback)
 animatedLine.pause('on')
 animatedLine.pause('off')
 animatedLine.reset()
@@ -25,17 +26,27 @@ EXPLOITATION CSS
 
 S.AnimatedLine = class {
 
-    constructor (path, duration, easing, opts) {
+    constructor (path) {
         this.path = S.Selector.el(path)
         this.pathL = this.path.length
-        this.duration = duration
-        this.easing = easing
-        this.opts = opts || false
 
         this.merom = []
     }
 
     play () {
+        this.type = 'play'
+        this.run(arguments)
+    }
+
+    reverse (duration, easing, callback) {
+        this.type = 'reverse'
+        this.run(arguments)
+    }
+
+    run (opts) {
+        this.duration = opts[0]
+        this.easing = opts[1]
+        this.callback = opts[2]
         for (let i = 0; i < this.pathL; i++) {
             this.animationLine(this.path[i], i)
         }
@@ -55,13 +66,16 @@ S.AnimatedLine = class {
 
     animationLine (path, i) {
         const pathLength = path.getTotalLength()
-        const start = this.opts.reverse ? 0 : pathLength
-        const end = this.opts.reverse ? pathLength : 0
+        const start = this.type === 'reverse' ? +path.style.strokeDashoffset : pathLength
+        const end = this.type === 'reverse' ? pathLength : 0
+        if (this.type === 'reverse') {
+            console.log(pathLength - (+path.style.strokeDashoffset))
+        }
 
         path.style.strokeDasharray = pathLength
         path.style.opacity = 1
 
-        this.merom[i] = new S.Merom(path, 'strokeDashoffset', start, end, this.duration, this.easing, {callback: this.opts.callback})
+        this.merom[i] = new S.Merom(path, 'strokeDashoffset', start, end, this.duration, this.easing, {callback: this.callback})
         this.merom[i].play()
     }
 }
