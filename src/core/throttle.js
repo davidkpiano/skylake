@@ -17,7 +17,7 @@ S.Throttle = class {
         this.timer = 0
         this.opts = options
 
-        S.BindMaker(this, ['resize'])
+        S.BindMaker(this, ['atEndController'])
     }
 
     init () {
@@ -25,15 +25,15 @@ S.Throttle = class {
 
         if (!this.timeout) {
             this.timeout = true
-            S.Delay(this.resize, this.opts.delay)
+            S.Delay(this.atEndController, this.opts.delay)
         }
     }
 
-    resize () {
+    atEndController () {
         const currentTime = S.Win.perfNow
 
         if (currentTime - this.startTime < this.opts.delay) {
-            this.timer = S.Delay(this.resize, this.opts.delay)
+            this.timer = S.Delay(this.atEndController, this.opts.delay)
             if (!this.opts.atEnd) {
                 this.opts.callback()
             }

@@ -1,6 +1,7 @@
 /*
 
 const isString = S.Is.string(varToCheck)
+const isObject = S.Is.object(varToCheck)
 
 */
 
@@ -8,6 +9,10 @@ const Is = class {
 
     string (varToCheck) {
         return typeof varToCheck === 'string'
+    }
+
+    object (varToCheck) {
+        return varToCheck === Object(varToCheck)
     }
 
 /*

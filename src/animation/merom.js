@@ -3,55 +3,73 @@
 RULES
 ─────
 
-BUG WITH ROLLUP AND DETECT NODELIST :
-for animate elements with class :
-►►►  for one   →   passing dom element
-►►►  for all   →   '.myClass'
-
 For 3dx & 3dy properties :
 ►►►  string   →   px
 ►►►  int      →   %
 
 Delay :
-►►►  before   →   int
-►►►  after    →   int
+►►►  delay           →   int
+►►►  callbackDelay   →   int
 
-During example :
-►►►  elements needs to move during scroll
+During :
+►►►  example : elements needs to move during scroll
 
 EXAMPLES
 ────────
 
-const a1 = new S.Animate('.class', '3dy', 0, 100, 'Power4Out', 1000)
-a1.go()
+const animation1 = new S.Merom('.class', '3dy', 0, 100, 1000, 'Power4Out')
+animation1.play()
+animation1.pause('on')
+animation1.pause('off')
 
-const a2 = new S.Animate(domElement, 'opacity', 1, 0, 'linear', 1000, {callback: myCallback})
-a2.go()
+const animation2 = new S.Merom(domElement, 'opacity', 1, 0, 1000, 'linear', {callback: myCallback})
+animation2.play()
 
-const a3 = new S.Animate('#id', '3dx', '0', '100', 'linear', 1000, {before: 500, after: 500, callback: callback, during: duringCallback})
-a3.go()
+const animation3 = new S.Merom('#id', '3dx', '0', '100', 1000, 'linear', {delay: 500, callbackDelay: 500, callback: myCallback, during: duringCallback})
+animation3.play()
 
-const a4 = new S.Animate('#id', ['rotate', '3dy'], [0, '0'], [-45, '-6'], 'Power4Out', 450)
-a4.go()
+const animation4 = new S.Merom('#id', ['rotate', '3dy'], [0, '0'], [-45, '-6'], 450, 'Power4Out')
+animation4.play()
+
+const animation5 = new S.Merom('#id', '3dx', '0', '100')
+animation5.play()
+
+BUG
+───
+
+ROLLUP AND DETECT NODELIST : S.Is.nodeList(this.el)
+So for animate elements with class :
+►►►  for one   →   passing dom element
+►►►  for all   →   '.myClass'
 
 */
 
-S.Animate = class {
+S.Merom = class {
 
-    constructor (element, prop, start, end, easing, duration, otps) {
+    constructor (element, prop, start, end, duration, easing, opts) {
         const args = arguments
         this.element = element
         this.prop = prop
         this.start = start
         this.end = end
-        this.easing = easing
-        this.duration = duration
-        this._opts = otps || false
 
-        this.before = this._opts.before ? this._opts.before : 0
-        this.after = this._opts.after ? this._opts.after : 0
+        if (S.Is.object(duration)) {
+            this.duration = 0
+            this.easing = 'linear'
+            this.opts = duration
+        } else {
+            this.duration = duration || 0
+            this.easing = easing || 'linear'
+            this.opts = opts || false
+        }
 
-        this.processingEl()
+        this.delay = this.opts.delay || 0
+        this.callbackDelay = this.opts.callbackDelay || 0
+
+        this.el = S.Selector.el(this.element)
+        this.elL = this.el.length
+
+        this.deltaTimeAtPause = 0
 
         this.EasingLibrary = S.Easing
         this.raf = new S.RafIndex()
@@ -61,8 +79,20 @@ S.Animate = class {
         S.BindMaker(this, ['getRaf', 'loop'])
     }
 
-    go () {
-        S.Delay(this.getRaf, this.before)
+    play () {
+        S.Delay(this.getRaf, this.delay)
+    }
+
+    pause (status) {
+        if (status === 'on') {
+            this.isPaused = true
+            this.deltaTimeSave = this.deltaTime
+        } else {
+            this.isPaused = false
+            this.deltaTimeAtPause = this.deltaTimeSave
+            this.startTime = S.Win.perfNow
+            this.raf.start(this.loop)
+        }
     }
 
     getRaf () {
@@ -71,8 +101,11 @@ S.Animate = class {
     }
 
     loop () {
+        if (this.isPaused) return
+
         const currentTime = S.Win.perfNow
-        const multiplier = (currentTime - this.startTime) / this.duration
+        this.deltaTime = currentTime - this.startTime + this.deltaTimeAtPause
+        const multiplier = this.deltaTime / this.duration
         const multiplierT = multiplier > 1 ? 1 : multiplier // T → ternary
         const easingMultiplier = this.EasingLibrary[this.easing](multiplierT)
         let value
@@ -89,13 +122,13 @@ S.Animate = class {
 
         this.update(value)
 
-        if (multiplierT < 1) {
+         if (multiplierT < 1) {
             this.raf.start(this.loop)
         } else {
             this.raf.cancel()
             this.update(this.end)
-            if (this._opts.callback) {
-                S.Delay(this._opts.callback, this.after)
+            if (this.opts.callback) {
+                S.Delay(this.opts.callback, this.callbackDelay)
             }
         }
     }
@@ -111,16 +144,16 @@ S.Animate = class {
             }
         } else {
             switch (this.prop) {
+                case '3dx':
+                case '3dy':
+                    this.update = this.setStyleT3d
+                    break
                 case 'x':
                 case 'y':
                     this.update = this.setAttribut
                     break
                 case 'scrollTop':
                     this.update = this.setScrollTop
-                    break
-                case '3dx':
-                case '3dy':
-                    this.update = this.setStyleT3d
                     break
                 default:
                     this.update = this.setStyle
@@ -151,18 +184,6 @@ S.Animate = class {
         this.updateDom('transform', 'transform', multipleTransform)
     }
 
-    setAttribut (value) {
-        this.updateDom('setAttribut', this.prop, value)
-    }
-
-    setScrollTop (value) {
-        this.el[this.prop] = value
-
-        if (this._opts.during) {
-            this._opts.during(value)
-        }
-    }
-
     setStyleT3d (value) {
         const valueUnit = S.Is.string(this.start) ? value + 'px' : value + '%'
         const translate = this.prop === '3dx' ? valueUnit + ',0' : '0,' + valueUnit
@@ -171,35 +192,32 @@ S.Animate = class {
         this.updateDom('transform', 'transform', translate3d)
     }
 
+    setAttribut (value) {
+        this.updateDom('setAttribut', this.prop, value)
+    }
+
+    setScrollTop (value) {
+        this.element[this.prop] = value
+
+        if (this.opts.during) {
+            this.opts.during(value)
+        }
+    }
+
     setStyle (value) {
         this.updateDom('style', this.prop, value)
     }
 
     updateDom (type, prop, value) {
-        const elL = this.multiple ? this.el.length : 1
-
-        for (let i = 0; i < elL; i++) {
-            const el = this.multiple ? this.el[i] : this.el
-
+        for (let i = 0; i < this.elL; i++) {
             if (type === 'transform') {
-                el.style.webkitTransform = value
+                this.el[i].style.webkitTransform = value
             }
             if (type === 'setAttribut') {
-                el.setAttribute(prop, value)
+                this.el[i].setAttribute(prop, value)
             } else {
-                el.style[prop] = value
+                this.el[i].style[prop] = value
             }
-        }
-    }
-
-    processingEl () {
-        if (S.Is.string(this.element)) {
-            this.el = S.Selector.el(this.element)
-            this.multiple = S.Selector.type(this.element) === 'class'
-        } else {
-            this.el = this.element
-            // this.multiple = S.Is.nodeList(this.el)
-            this.multiple = false
         }
     }
 

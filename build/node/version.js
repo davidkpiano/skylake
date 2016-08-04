@@ -9,11 +9,19 @@ const rl = Readline.createInterface({
     output: process.stdout
 })
 rl.question(question, version => {
-    const futureVersion = version === 'n' ? PackageJson.version : version
+    const futureVersion = isInt(version.charAt(0)) ? version : PackageJson.version
     updatePackage(futureVersion)
     addSignature(futureVersion)
     rl.close()
 })
+
+function isInt(value) {
+    if (isNaN(value)) {
+        return false
+    }
+    const x = parseFloat(value)
+    return (x | 0) === x
+}
 
 function updatePackage (version) {
     PackageJson.version = version

@@ -2,8 +2,9 @@ const fs = require('fs')
 
 const srcArr = [
     'src/base/s.js',
-    'src/animate/animate.js',
-    'src/animate/timeline.js',
+    'src/animation/merom.js',
+    'src/animation/animated-line.js',
+    'src/animation/timeline.js',
     'src/core/bind-maker.js',
     'src/core/delay.js',
     'src/core/easing.js',
@@ -18,7 +19,6 @@ const srcArr = [
     'src/event/scroll.js',
     'src/event/wt-disable.js',
     'src/event/wt.js',
-    'src/fx/animated-line.js',
     'src/listener/auto-transitionend.js',
     'src/listener/listen.js',
     'src/polyfill/perf-now.js',

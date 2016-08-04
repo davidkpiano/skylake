@@ -9,12 +9,18 @@ const name = S.Selector.name(selector)
 const Selector = class {
 
     el (selector) {
-        const elementName = selector.substring(1)
-        if (selector.charAt(0) === '#') {
-            return S.Geb.id(elementName)
+        let el = []
+        if (S.Is.string(selector)) {
+            const elementName = selector.substring(1)
+            if (selector.charAt(0) === '#') {
+                el[0] = S.Geb.id(elementName)
+            } else {
+                el = S.Geb.class(elementName)
+            }
         } else {
-            return S.Geb.class(elementName)
+            el[0] = selector
         }
+        return el
     }
 
     type (selector) {
