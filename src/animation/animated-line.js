@@ -35,18 +35,18 @@ S.AnimatedLine = class {
 
     play () {
         this.type = 'play'
-        this.run(arguments)
+        this.run(...arguments)
     }
 
     reverse () {
         this.type = 'reverse'
-        this.run(arguments)
+        this.run(...arguments)
     }
 
-    run (opts) {
-        this.duration = opts[0]
-        this.easing = opts[1]
-        this.callback = opts[2]
+    run (duration, easing, callback) {
+        this.duration = duration
+        this.easing = easing
+        this.callback = callback
         for (let i = 0; i < this.pathL; i++) {
             this.animationLine(this.path[i], i)
         }
@@ -66,8 +66,16 @@ S.AnimatedLine = class {
 
     animationLine (path, i) {
         const pathLength = path.getTotalLength()
-        const start = this.type === 'reverse' ? +path.style.strokeDashoffset : pathLength
-        const end = this.type === 'reverse' ? pathLength : 0
+        let start
+        let end
+        if (this.type === 'reverse') {
+            const pathSDO = path.style.strokeDashoffset
+            start = pathSDO.charAt(pathSDO.length - 1) === 'x' ? +pathSDO.substring(0, pathSDO.length - 2) : +pathSDO
+            end = pathLength
+        } else {
+            start = pathLength
+            end = 0
+        }
 
         path.style.strokeDasharray = pathLength
         path.style.opacity = 1
