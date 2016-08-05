@@ -38,7 +38,7 @@ S.AnimatedLine = class {
         this.run(arguments)
     }
 
-    reverse (duration, easing, callback) {
+    reverse () {
         this.type = 'reverse'
         this.run(arguments)
     }
