@@ -1,6 +1,16 @@
 /**
  * Super-tool
  *
+ * Version   →  1.0.33
+ * Github    →  https://github.com/ariiiman/skylake
+ * License   →  http://opensource.org/licenses/MIT
+ * Author    →  Aristide Benoist © 2016
+ * Website   →  www.aristidebenoist.com
+ * Date      →  Aug 8, 2016
+ */
+/**
+ * Super-tool
+ *
  * Version   →  1.0.32
  * Github    →  https://github.com/ariiiman/skylake
  * License   →  http://opensource.org/licenses/MIT
