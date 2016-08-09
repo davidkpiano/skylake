@@ -8,6 +8,8 @@ S.Listen(document, 'remove', 'touchmove', callback)
 
 S.Listen = (element, action, type, callback) => {
     const doc = document
+    const el  = S.Selector.el(element)
+    const elL = el.length
     let listenType
 
     if (type === 'mouseWheel') {
@@ -18,5 +20,7 @@ S.Listen = (element, action, type, callback) => {
         listenType = type
     }
 
-    element[action + 'EventListener'](listenType, callback)
+    for (let i = 0; i < elL; i++) {
+        el[i][action + 'EventListener'](listenType, callback)
+    }
 }

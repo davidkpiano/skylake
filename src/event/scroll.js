@@ -1,6 +1,6 @@
 /*
 
-const Scroll = new S.Scroll({
+const scroll = new S.Scroll({
     callback: callback,
     throttle: {
         delay: 100,
@@ -8,8 +8,8 @@ const Scroll = new S.Scroll({
     }
 })
 
-Scroll.on()
-Scroll.off()
+scroll.on()
+scroll.off()
 
 function callback (currentScrollY, delta) {
 
