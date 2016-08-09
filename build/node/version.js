@@ -39,7 +39,7 @@ function addSignature (version) {
 
     const signatureArr = [
         '/**',
-        ' * Super-tool',
+        ' * Skylake',
         ' *',
         ' * Version   →  ' + version,
         ' * Github    →  https://github.com/ariiiman/skylake',

@@ -6,7 +6,11 @@ export default {
     dest: 'index.js',
     plugins: [
         babel({
-            presets: 'es2015-rollup'
+            babelrc: false,
+            presets: [
+                ['es2015', { 'modules': false }]
+            ],
+            plugins: ['external-helpers']
         }),
         uglify()
     ],
