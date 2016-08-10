@@ -19,6 +19,10 @@ const Win = class {
         return window.location.pathname
     }
 
+    get hostname () {
+        return window.location.hostname
+    }
+
     get href () {
         return window.location.href
     }
