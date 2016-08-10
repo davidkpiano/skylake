@@ -1,11 +1,11 @@
 /*
 
 const RO = new S.RO({
-    callback: callback,
     throttle: {
         delay: 100,
         atEnd: true
-    }
+    },
+    callback: callback
 })
 
 RO.on()

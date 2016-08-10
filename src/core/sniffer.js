@@ -38,6 +38,21 @@ const Sniffer = class {
         return 'ontouchend' in window
     }
 
+    get isPageError () {
+        const meta  = S.Geb.tag('meta')
+        const metaL = meta.length
+        let hasMetaError = false
+
+        for (let i = 0; i < metaL; i++) {
+            if (meta[i].name === 'error') {
+                hasMetaError = true
+                break
+            }
+        }
+
+        return hasMetaError
+    }
+
 }
 
 S.Sniffer = new Sniffer()

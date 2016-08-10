@@ -1,11 +1,11 @@
 /*
 
 const scroll = new S.Scroll({
-    callback: callback,
     throttle: {
         delay: 100,
         atEnd: true
-    }
+    },
+    callback: callback
 })
 
 scroll.on()
