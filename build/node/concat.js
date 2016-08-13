@@ -14,7 +14,6 @@ const srcArr = [
     'src/el/Geb.js', // Must be before 'dom'
     'src/el/Dom.js', // Must be before 'detect'
     'src/el/Selector.js',
-    'src/event/DDDisable.js',
     'src/event/MM.js',
     'src/event/RO.js',
     'src/event/Scroll.js',
