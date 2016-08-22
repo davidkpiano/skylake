@@ -4,6 +4,7 @@ const srcArr = [
     'src/base/S.js',
     'src/animation/Merom.js',
     'src/animation/AnimatedLine.js',
+    'src/animation/Morph.js',
     'src/animation/Timeline.js',
     'src/core/BindMaker.js',
     'src/core/Delay.js',

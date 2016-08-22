@@ -122,7 +122,7 @@ S.Merom = class {
 
         this.update(value)
 
-         if (multiplierT < 1) {
+        if (multiplierT < 1) {
             this.raf.start(this.loop)
         } else {
             this.raf.cancel()
@@ -146,11 +146,9 @@ S.Merom = class {
             switch (this.prop) {
                 case '3dx':
                 case '3dy':
-                    this.update = this.setStyleT3d
-                    break
-                case 'x':
-                case 'y':
-                    this.update = this.setAttribut
+                case 'scale3d':
+                case 'rotate':
+                    this.update = this.simpleT
                     break
                 case 'scrollTop':
                     this.update = this.setScrollTop
@@ -166,7 +164,8 @@ S.Merom = class {
     multipleT (value) {
         let t3dx = 0
         let t3dy = 0
-        let rotate = 0
+        let rotate = ''
+        let scale3d = ''
 
         for (let i = 0; i < this.updateQty; i++) {
             if (this.prop[i] === '3dx') {
@@ -175,25 +174,30 @@ S.Merom = class {
                 t3dy = S.Is.string(this.start[i]) ? value[i] + 'px' : value[i] + '%'
             } else if (this.prop[i] === 'rotate') {
                 rotate = 'rotate(' + value[i] + 'deg)'
+            } else if (this.prop[i] === 'scale3d') {
+                scale3d = 'scale3d(' + value[i] + ',' + value[i] + ',1)'
             }
         }
 
         const translate3d = 'translate3d(' + t3dx + ',' + t3dy + ',0)'
-        const multipleTransform = translate3d + ' ' + rotate
+        const multipleTransform = translate3d + ' ' + rotate + ' ' + scale3d
 
-        this.updateDom('transform', 'transform', multipleTransform)
+        this.updateDom('transform', multipleTransform)
     }
 
-    setStyleT3d (value) {
-        const valueUnit = S.Is.string(this.start) ? value + 'px' : value + '%'
-        const translate = this.prop === '3dx' ? valueUnit + ',0' : '0,' + valueUnit
-        const translate3d = 'translate3d(' + translate + ',0)'
+    simpleT (value) {
+        let transformValue
+        if (this.prop === '3dx' || this.prop === '3dy') {
+            const valueUnit = S.Is.string(this.start) ? value + 'px' : value + '%'
+            const translate = this.prop === '3dx' ? valueUnit + ',0' : '0,' + valueUnit
+            transformValue = 'translate3d(' + translate + ',0)'
+        } else if (this.prop === 'scale3d') {
+            transformValue = 'scale3d(' + value + ',' + value + ',1)'
+        } else {
+            transformValue = 'rotate(' + value + 'deg)'
+        }
 
-        this.updateDom('transform', 'transform', translate3d)
-    }
-
-    setAttribut (value) {
-        this.updateDom('setAttribut', this.prop, value)
+        this.updateDom('transform', transformValue)
     }
 
     setScrollTop (value) {
@@ -205,15 +209,15 @@ S.Merom = class {
     }
 
     setStyle (value) {
-        this.updateDom('style', this.prop, value)
+        this.updateDom(this.prop, value)
     }
 
-    updateDom (type, prop, value) {
+    updateDom (prop, value) {
         for (let i = 0; i < this.elL; i++) {
-            if (type === 'transform') {
+            if (prop === 'transform') {
                 this.el[i].style.webkitTransform = value
-            }
-            if (type === 'setAttribut') {
+                this.el[i].style.transform = value
+            } else if (prop === 'x' || prop === 'y') {
                 this.el[i].setAttribute(prop, value)
             } else {
                 this.el[i].style[prop] = value
