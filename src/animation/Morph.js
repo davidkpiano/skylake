@@ -1,8 +1,9 @@
 /*
 
-►►► Element : polygon or path only
+►►► Type : 'polygon' or 'path'
 
 const morphAnimation = new S.Morph({
+    type: 'polygon',
     element: S.Geb.id('polygon'),
     newCoords: '50.2,12.8 63,0 63,4.1 63,7 63,10 63,13.1 63,17',
     duration: 1100,
@@ -20,8 +21,10 @@ S.Morph = class {
 
     constructor (opts) {
         this.opts = opts
-        this.coordsStart = this.getCoordsArr(this.opts.element.getAttribute('points'))
+        this.type = this.opts.type === 'polygon' ? 'points' : 'd'
+        this.coordsStart = this.getCoordsArr(this.opts.element.getAttribute(this.type))
         this.coordsEnd = this.getCoordsArr(this.opts.newCoords)
+
 
         this.raf = new S.RafIndex()
 
@@ -49,26 +52,25 @@ S.Morph = class {
         let coordsUpdate = ''
 
         for (let i = 0; i < this.coordsStart.length; i++) {
-            update[i] = this.isLetter(this.coordsStart[i]) ? this.coordsStart[i] : +this.coordsStart[i] + (+this.coordsEnd[i] - +this.coordsStart[i]) * easingMultiplier
+            update[i] = this.isLetter(this.coordsStart[i]) ? this.coordsStart[i] + ' ' : +this.coordsStart[i] + (+this.coordsEnd[i] - +this.coordsStart[i]) * easingMultiplier
+            coordsUpdate += update[i]
 
-            if (i === this.coordsStart.length - 1) {
-                coordsUpdate += this.coordsStart[i]
-            } else if (this.isLetter(this.coordsStart[i])) {
-                coordsUpdate += this.coordsStart[i] + ' '
-            } else if (coordsUpdate.charAt(coordsUpdate.length - 1) === ',') {
-                coordsUpdate += update[i] + ' '
-            } else {
-                coordsUpdate += update[i] + ','
+            if (i !== this.coordsStart.length - 1) {
+                if (coordsUpdate.charAt(coordsUpdate.length - 1) === ',') {
+                    coordsUpdate += ' '
+                } else {
+                    coordsUpdate += ','
+                }
             }
         }
 
-        this.opts.element.setAttribute('points', coordsUpdate)
+        this.opts.element.setAttribute(this.type, coordsUpdate)
 
         if (easingMultiplier < 1) {
             this.raf.start(this.loop)
         } else {
             this.raf.cancel()
-            this.opts.element.setAttribute('d', this.opts.newCoords)
+            this.opts.element.setAttribute(this.type, this.opts.newCoords)
             this.getCallback()
         }
     }
