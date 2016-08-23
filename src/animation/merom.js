@@ -31,7 +31,7 @@ animation3.play()
 const animation4 = new S.Merom('#id', ['rotate', '3dy'], [0, '0'], [-45, '-6'], 450, 'Power4Out')
 animation4.play()
 
-const animation5 = new S.Merom('#id', '3dx', '0', '100')
+const animation5 = new S.Merom('#id', 'scale', '1', '1.1')
 animation5.play()
 
 BUG
@@ -146,7 +146,7 @@ S.Merom = class {
             switch (this.prop) {
                 case '3dx':
                 case '3dy':
-                case 'scale3d':
+                case 'scale':
                 case 'rotate':
                     this.update = this.simpleT
                     break
@@ -165,7 +165,7 @@ S.Merom = class {
         let t3dx = 0
         let t3dy = 0
         let rotate = ''
-        let scale3d = ''
+        let scale = ''
 
         for (let i = 0; i < this.updateQty; i++) {
             if (this.prop[i] === '3dx') {
@@ -174,13 +174,13 @@ S.Merom = class {
                 t3dy = S.Is.string(this.start[i]) ? value[i] + 'px' : value[i] + '%'
             } else if (this.prop[i] === 'rotate') {
                 rotate = 'rotate(' + value[i] + 'deg)'
-            } else if (this.prop[i] === 'scale3d') {
-                scale3d = 'scale3d(' + value[i] + ',' + value[i] + ',1)'
+            } else if (this.prop[i] === 'scale') {
+                scale = 'scale(' + value[i] + ')'
             }
         }
 
         const translate3d = 'translate3d(' + t3dx + ',' + t3dy + ',0)'
-        const multipleTransform = translate3d + ' ' + rotate + ' ' + scale3d
+        const multipleTransform = translate3d + ' ' + rotate + ' ' + scale
 
         this.updateDom('transform', multipleTransform)
     }
@@ -191,8 +191,8 @@ S.Merom = class {
             const valueUnit = S.Is.string(this.start) ? value + 'px' : value + '%'
             const translate = this.prop === '3dx' ? valueUnit + ',0' : '0,' + valueUnit
             transformValue = 'translate3d(' + translate + ',0)'
-        } else if (this.prop === 'scale3d') {
-            transformValue = 'scale3d(' + value + ',' + value + ',1)'
+        } else if (this.prop === 'scale') {
+            transformValue = 'scale(' + value + ')'
         } else {
             transformValue = 'rotate(' + value + 'deg)'
         }

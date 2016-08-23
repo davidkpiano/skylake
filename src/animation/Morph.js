@@ -25,24 +25,28 @@ S.Morph = class {
         this.coordsStart = this.getCoordsArr(this.opts.element.getAttribute(this.type))
         this.coordsEnd = this.getCoordsArr(this.opts.newCoords)
 
-
         this.raf = new S.RafIndex()
 
-        S.BindMaker(this, ['run', 'loop'])
+        S.BindMaker(this, ['getRaf', 'loop'])
     }
 
     play () {
         const delay = this.opts.delay ? this.opts.delay : 0
-        S.Delay(this.run, delay)
+        S.Delay(this.getRaf, delay)
     }
 
-    run () {
-        this.startTime = S.Win.perfNow
+    pause () {
+        this.isPaused = true
+    }
 
+    getRaf () {
+        this.startTime = S.Win.perfNow
         this.raf.start(this.loop)
     }
 
     loop () {
+        if (this.isPaused) return
+
         const currentTime      = S.Win.perfNow
         const multiplier       = (currentTime - this.startTime) / this.opts.duration
         const multiplierT      = multiplier > 1 ? 1 : multiplier // T → ternary
