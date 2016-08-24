@@ -113,8 +113,8 @@ S.Merom = class {
         if (S.Is.object(duration)) {
             this.opts = duration
         } else {
-            this.duration = duration
-            this.easing = easing
+            this.duration = duration || this.duration
+            this.easing = easing || this.easing
             this.opts = opts || false
         }
 

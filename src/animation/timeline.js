@@ -47,6 +47,18 @@ S.Timeline = class {
         }
     }
 
+    reverse () {
+        for (let i = 0; i < this.contentL; i++) {
+            this.content[i].reverse(...arguments)
+        }
+    }
+
+    reset (opts) {
+        for (let i = 0; i < this.contentL; i++) {
+            this.content[i].reset(opts)
+        }
+    }
+
     get contentL () {
         return this.content.length
     }
