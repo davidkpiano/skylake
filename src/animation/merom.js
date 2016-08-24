@@ -11,6 +11,9 @@ Delay :
 ►►►  delay           →   int
 ►►►  callbackDelay   →   int
 
+Reverse :
+►►►  if 'duration' and 'easing' are not defined, it inherits the play() properties
+
 During :
 ►►►  example : elements needs to move during scroll
 
@@ -22,17 +25,20 @@ animation1.play()
 animation1.pause('on')
 animation1.pause('off')
 
-const animation2 = new S.Merom(domElement, 'opacity', 1, 0, 1000, 'linear', {callback: myCallback})
+const animation2 = new S.Merom(domElement, 'opacity', 1, 0, 1000, 'linear', {delay: 500, callbackDelay: 200, callback: myCallback})
 animation2.play()
 
-const animation3 = new S.Merom('#id', '3dx', '0', '100', 1000, 'linear', {delay: 500, callbackDelay: 500, callback: myCallback, during: duringCallback})
+const animation3 = new S.Merom('#id', ['rotate', '3dy'], [0, '0'], [-45, '-6'], 450, 'Power4Out')
 animation3.play()
 
-const animation4 = new S.Merom('#id', ['rotate', '3dy'], [0, '0'], [-45, '-6'], 450, 'Power4Out')
+const animation4 = new S.Merom('.class', 'scale', '0', '145', 1000, 'Power4Out')
 animation4.play()
+animation4.reverse(600, 'ExpoOut', {delay: 100, callbackDelay: 200, callback: myCallback})
 
-const animation5 = new S.Merom('#id', 'scale', '1', '1.1')
+const animation5 = new S.Merom('.class', '3dx', 1, 1.2, 700, 'Power1In')
 animation5.play()
+animation5.pause('on')
+animation5.reset({delay: 400, callbackDelay: 700, callback: myCallback})
 
 BUG
 ───
@@ -80,7 +86,10 @@ S.Merom = class {
     }
 
     play () {
-        S.Delay(this.getRaf, this.delay)
+        S.Delay(_ => {
+            this.isPaused = false
+            this.getRaf()
+        }, this.delay)
     }
 
     pause (status) {
@@ -88,11 +97,47 @@ S.Merom = class {
             this.isPaused = true
             this.deltaTimeSave = this.deltaTime
         } else {
-            this.isPaused = false
             this.deltaTimeAtPause = this.deltaTimeSave
-            this.startTime = S.Win.perfNow
-            this.raf.start(this.loop)
+            this.delay = 0
+            this.play()
         }
+    }
+
+    reverse (duration, easing, opts) {
+        this.pause('on')
+
+        this.end = this.start
+        this.start = S.Is.string(this.start) ? String(this.value) : this.value
+        this.distance = +this.end - +this.start
+
+        if (S.Is.object(duration)) {
+            this.opts = duration
+        } else {
+            this.duration = duration
+            this.easing = easing
+            this.opts = opts || false
+        }
+
+        this.delay = this.opts.delay || 0
+        this.callbackDelay = this.opts.callbackDelay || 0
+
+        this.play()
+    }
+
+    reset (opts) {
+        this.pause('on')
+
+        this.end = this.start
+        this.start = S.Is.string(this.start) ? String(this.value) : this.value
+        this.distance = +this.end - +this.start
+        this.duration = 0
+        this.easing = 'linear'
+        this.opts = opts || false
+
+        this.delay = this.opts.delay || 0
+        this.callbackDelay = this.opts.callbackDelay || 0
+
+        this.play()
     }
 
     getRaf () {
@@ -108,19 +153,18 @@ S.Merom = class {
         const multiplier = this.deltaTime / this.duration
         const multiplierT = multiplier > 1 ? 1 : multiplier // T → ternary
         const easingMultiplier = this.EasingLibrary[this.easing](multiplierT)
-        let value
 
         // The linear interpolation → Lerp
         if (this.isNotMultipleT) {
-            value = +this.start + this.distance * easingMultiplier
+            this.value = +this.start + this.distance * easingMultiplier
         } else {
-            value = []
+            this.value = []
             for (let i = 0; i < this.updateQty; i++) {
-                value[i] = +this.start[i] + this.distance[i] * easingMultiplier
+                this.value[i] = +this.start[i] + this.distance[i] * easingMultiplier
             }
         }
 
-        this.update(value)
+        this.update(this.value)
 
         if (multiplierT < 1) {
             this.raf.start(this.loop)
@@ -169,9 +213,9 @@ S.Merom = class {
 
         for (let i = 0; i < this.updateQty; i++) {
             if (this.prop[i] === '3dx') {
-                t3dx = S.Is.string(this.start[i]) ? value[i] + 'px' : value[i] + '%'
+                t3dx = value[i] + this.t3dUnit(this.start[i])
             } else if (this.prop[i] === '3dy') {
-                t3dy = S.Is.string(this.start[i]) ? value[i] + 'px' : value[i] + '%'
+                t3dy = value[i] + this.t3dUnit(this.start[i])
             } else if (this.prop[i] === 'rotate') {
                 rotate = 'rotate(' + value[i] + 'deg)'
             } else if (this.prop[i] === 'scale') {
@@ -188,7 +232,7 @@ S.Merom = class {
     simpleT (value) {
         let transformValue
         if (this.prop === '3dx' || this.prop === '3dy') {
-            const valueUnit = S.Is.string(this.start) ? value + 'px' : value + '%'
+            const valueUnit = value + this.t3dUnit(this.start)
             const translate = this.prop === '3dx' ? valueUnit + ',0' : '0,' + valueUnit
             transformValue = 'translate3d(' + translate + ',0)'
         } else if (this.prop === 'scale') {
@@ -223,6 +267,10 @@ S.Merom = class {
                 this.el[i].style[prop] = value
             }
         }
+    }
+
+    t3dUnit (valueToCheck) {
+        return S.Is.string(valueToCheck) ? 'px' : '%'
     }
 
 }
