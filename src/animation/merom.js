@@ -53,7 +53,6 @@ So for animate elements with class :
 S.Merom = class {
 
     constructor (element, prop, start, end, duration, easing, opts) {
-        const args = arguments
         this.element = element
         this.prop = prop
         this.start = start
@@ -69,8 +68,7 @@ S.Merom = class {
             this.opts = opts || false
         }
 
-        this.delay = this.opts.delay || 0
-        this.callbackDelay = this.opts.callbackDelay || 0
+        this.delaysInit()
 
         this.el = S.Selector.el(this.element)
         this.elL = this.el.length
@@ -106,10 +104,6 @@ S.Merom = class {
     reverse (duration, easing, opts) {
         this.pause('on')
 
-        this.end = this.start
-        this.start = S.Is.string(this.start) ? String(this.value) : this.value
-        this.distance = +this.end - +this.start
-
         if (S.Is.object(duration)) {
             this.opts = duration
         } else {
@@ -118,26 +112,17 @@ S.Merom = class {
             this.opts = opts || false
         }
 
-        this.delay = this.opts.delay || 0
-        this.callbackDelay = this.opts.callbackDelay || 0
-
-        this.play()
+        this.getReset()
     }
 
     reset (opts) {
         this.pause('on')
 
-        this.end = this.start
-        this.start = S.Is.string(this.start) ? String(this.value) : this.value
-        this.distance = +this.end - +this.start
         this.duration = 0
         this.easing = 'linear'
         this.opts = opts || false
 
-        this.delay = this.opts.delay || 0
-        this.callbackDelay = this.opts.callbackDelay || 0
-
-        this.play()
+        this.getReset()
     }
 
     getRaf () {
@@ -154,13 +139,12 @@ S.Merom = class {
         const multiplierT = multiplier > 1 ? 1 : multiplier // T → ternary
         const easingMultiplier = this.EasingLibrary[this.easing](multiplierT)
 
-        // The linear interpolation → Lerp
         if (this.isNotMultipleT) {
-            this.value = +this.start + this.distance * easingMultiplier
+            this.value = S.Lerp.init(+this.start, +this.end, easingMultiplier)
         } else {
             this.value = []
             for (let i = 0; i < this.updateQty; i++) {
-                this.value[i] = +this.start[i] + this.distance[i] * easingMultiplier
+                this.value[i] = S.Lerp.init(+this.start[i], +this.end[i], easingMultiplier)
             }
         }
 
@@ -178,14 +162,10 @@ S.Merom = class {
     }
 
     selectUpdateType () {
-        if (this.prop.constructor === Array) {
+        if (S.Is.array(this.prop)) {
             this.isNotMultipleT = false
             this.updateQty = this.prop.length
             this.update = this.multipleT
-            this.distance = []
-            for (let i = 0; i < this.updateQty; i++) {
-                this.distance[i] = +this.end[i] - +this.start[i]
-            }
         } else {
             switch (this.prop) {
                 case '3dx':
@@ -201,7 +181,6 @@ S.Merom = class {
                     this.update = this.setStyle
             }
             this.isNotMultipleT = true
-            this.distance = +this.end - +this.start
         }
     }
 
@@ -235,10 +214,10 @@ S.Merom = class {
             const valueUnit = value + this.t3dUnit(this.start)
             const translate = this.prop === '3dx' ? valueUnit + ',0' : '0,' + valueUnit
             transformValue = 'translate3d(' + translate + ',0)'
-        } else if (this.prop === 'scale') {
-            transformValue = 'scale(' + value + ')'
-        } else {
+        } else if (this.prop === 'rotate') {
             transformValue = 'rotate(' + value + 'deg)'
+        } else {
+            transformValue = 'scale(' + value + ')'
         }
 
         this.updateDom('transform', transformValue)
@@ -267,6 +246,20 @@ S.Merom = class {
                 this.el[i].style[prop] = value
             }
         }
+    }
+
+    delaysInit () {
+        this.delay = this.opts.delay || 0
+        this.callbackDelay = this.opts.callbackDelay || 0
+    }
+
+    getReset () {
+        this.end = this.start
+        this.start = S.Is.string(this.start) ? String(this.value) : this.value
+
+        this.delaysInit()
+
+        this.play()
     }
 
     t3dUnit (valueToCheck) {

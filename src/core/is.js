@@ -7,12 +7,16 @@ const isObject = S.Is.object(varToCheck)
 
 const Is = class {
 
-    string (varToCheck) {
-        return typeof varToCheck === 'string'
+    string (v) {
+        return typeof v === 'string'
     }
 
-    object (varToCheck) {
-        return varToCheck === Object(varToCheck)
+    object (v) {
+        return v === Object(v)
+    }
+
+    array (v) {
+        v.constructor === Array
     }
 
 /*

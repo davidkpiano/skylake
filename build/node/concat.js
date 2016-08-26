@@ -10,6 +10,7 @@ const srcArr = [
     'src/core/Delay.js',
     'src/core/Easing.js',
     'src/core/Is.js',
+    'src/core/Lerp.js',
     'src/core/Sniffer.js',
     'src/core/Throttle.js',
     'src/el/Geb.js', // Must be before 'dom'

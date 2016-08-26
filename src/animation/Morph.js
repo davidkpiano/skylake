@@ -56,7 +56,7 @@ S.Morph = class {
         let coordsUpdate = ''
 
         for (let i = 0; i < this.coordsStart.length; i++) {
-            update[i] = this.isLetter(this.coordsStart[i]) ? this.coordsStart[i] + ' ' : +this.coordsStart[i] + (+this.coordsEnd[i] - +this.coordsStart[i]) * easingMultiplier
+            update[i] = this.isLetter(this.coordsStart[i]) ? this.coordsStart[i] + ' ' : S.Lerp.init(+this.coordsStart[i], +this.coordsEnd[i], easingMultiplier)
             coordsUpdate += update[i]
 
             if (i !== this.coordsStart.length - 1) {
