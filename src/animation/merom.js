@@ -240,7 +240,7 @@ S.Merom = class {
             if (prop === 'transform') {
                 this.el[i].style.webkitTransform = value
                 this.el[i].style.transform = value
-            } else if (prop === 'x' || prop === 'y') {
+            } else if (prop === 'x' || prop === 'y' || prop === 'r') {
                 this.el[i].setAttribute(prop, value)
             } else {
                 this.el[i].style[prop] = value
