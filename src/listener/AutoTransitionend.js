@@ -6,8 +6,8 @@ S.AutoTransitionend('home-number', callbacks, args)
 
 */
 
-S.AutoTransitionend = (elName, callback, args) => {
-    let el = S.Geb.id(elName)
+S.AutoTransitionend = function (elName, callback, args) {
+    var el = S.Geb.id(elName)
 
     listener('add')
 

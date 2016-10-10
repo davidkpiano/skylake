@@ -11,41 +11,37 @@ function callback (posX, posY) {
 
 */
 
-S.MM = class {
+S.MM = function (callback) {
+    this.callback = callback
+    this.posX = 0
+    this.posY = 0
 
-    constructor (callback) {
-        this.callback = callback
-        this.posX = 0
-        this.posY = 0
+    this.rafTicking = new S.RafTicking()
 
-        this.rafTicking = new S.RafTicking()
+    S.BindMaker(this, ['getRAF', 'run'])
+}
 
-        S.BindMaker(this, ['getRAF', 'run'])
-    }
+S.MM.prototype.on = function () {
+    this.listeners('add')
+}
 
-    on () {
-        this.listeners('add')
-    }
+S.MM.prototype.off = function () {
+    this.listeners('remove')
+}
 
-    off () {
-        this.listeners('remove')
-    }
+S.MM.prototype.listeners = function (action) {
+    S.Listen(document, action, 'mousemove', this.getRAF)
+}
 
-    listeners (action) {
-        S.Listen(document, action, 'mousemove', this.getRAF)
-    }
+S.MM.prototype.getRAF = function (event) {
+    this.event = event
 
-    getRAF (event) {
-        this.event = event
+    this.rafTicking.start(this.run)
+}
 
-        this.rafTicking.start(this.run)
-    }
+S.MM.prototype.run = function () {
+    this.posX = this.event.pageX
+    this.posY = this.event.pageY
 
-    run () {
-        this.posX = this.event.pageX
-        this.posY = this.event.pageY
-
-        this.callback(this.posX, this.posY)
-    }
-
+    this.callback(this.posX, this.posY)
 }

@@ -6,6 +6,6 @@ S.ScrollZero()
 
 */
 
-S.ScrollZero = _ => {
+S.ScrollZero = function () {
     S.Scrollable.scrollTop = 0
 }

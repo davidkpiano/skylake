@@ -13,44 +13,40 @@ RO.off()
 
 */
 
-S.RO = class {
+S.RO = function (options) {
+    this.opts = options
+    this.isTouch = S.Sniffer.isTouch
 
-    constructor (options) {
-        this.opts = options
-        this.isTouch = S.Sniffer.isTouch
+    S.BindMaker(this, ['getThrottle', 'getRAF'])
 
-        S.BindMaker(this, ['getThrottle', 'getRAF'])
+    this.throttle = new S.Throttle({
+        callback: this.getRAF,
+        delay: this.opts.throttle.delay,
+        atEnd: this.opts.throttle.atEnd
+    })
+    this.rafTicking = new S.RafTicking()
+}
 
-        this.throttle = new S.Throttle({
-            callback: this.getRAF,
-            delay: this.opts.throttle.delay,
-            atEnd: this.opts.throttle.atEnd
-        })
-        this.rafTicking = new S.RafTicking()
+S.RO.prototype.on = function () {
+    this.listeners('add')
+}
+
+S.RO.prototype.off = function () {
+    this.listeners('remove')
+}
+
+S.RO.prototype.listeners = function (action) {
+    if (this.isTouch) {
+        S.Listen(window, action, 'orientationchange', this.getThrottle)
+    } else {
+        S.Listen(window, action, 'resize', this.getThrottle)
     }
+}
 
-    on () {
-        this.listeners('add')
-    }
+S.RO.prototype.getThrottle = function () {
+    this.throttle.init()
+}
 
-    off () {
-        this.listeners('remove')
-    }
-
-    listeners (action) {
-        if (this.isTouch) {
-            S.Listen(window, action, 'orientationchange', this.getThrottle)
-        } else {
-            S.Listen(window, action, 'resize', this.getThrottle)
-        }
-    }
-
-    getThrottle () {
-        this.throttle.init()
-    }
-
-    getRAF () {
-        this.rafTicking.start(this.opts.callback)
-    }
-
+S.RO.prototype.getRAF = function () {
+    this.rafTicking.start(this.opts.callback)
 }

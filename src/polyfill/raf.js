@@ -4,14 +4,14 @@ S.Polyfill.raf()
 
 */
 
-S.Polyfill.raf = _ => {
-    let lastTime = 0
+S.Polyfill.raf = function () {
+    var lastTime = 0
 
     if (!window.requestAnimationFrame) {
         window.requestAnimationFrame = function (callback) {
-            let currentTime = new Date().getTime()
-            let timeToCall = Math.max(0, 16 - (currentTime - lastTime))
-            let id = S.Delay(_ => {
+            var currentTime = new Date().getTime()
+            var timeToCall = Math.max(0, 16 - (currentTime - lastTime))
+            var id = S.Delay(function () {
                 callback(currentTime + timeToCall)
             }, timeToCall)
             lastTime = currentTime + timeToCall
@@ -20,7 +20,7 @@ S.Polyfill.raf = _ => {
     }
 
     if (!window.cancelAnimationFrame) {
-        window.cancelAnimationFrame = id => {
+        window.cancelAnimationFrame = function (id) {
             clearTimeout(id)
         }
     }

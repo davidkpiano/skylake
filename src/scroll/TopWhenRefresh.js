@@ -6,7 +6,7 @@ S.TopWhenRefresh()
 
 */
 
-S.TopWhenRefresh = _ => {
+S.TopWhenRefresh = function () {
     window.onbeforeunload = function () {
         window.scrollTo(0, 0)
     }

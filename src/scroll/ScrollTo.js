@@ -14,11 +14,11 @@ S.ScrollTo(options)
 
 */
 
-S.ScrollTo = options => {
-    const opts            = options
-    const scrollable      = S.Scrollable
-    const initialPosition = scrollable.scrollTop
-    const animation       = new S.Merom(scrollable, 'scrollTop', initialPosition, opts.destination, opts.duration, opts.easing, {callback: getCallback, during: opts.during})
+S.ScrollTo = function (options) {
+    var opts            = options
+    var scrollable      = S.Scrollable
+    var initialPosition = scrollable.scrollTop
+    var animation       = new S.Merom(scrollable, 'scrollTop', initialPosition, opts.destination, opts.duration, opts.easing, {callback: getCallback, during: opts.during})
 
     if (opts.destination === initialPosition) {
         getCallback()

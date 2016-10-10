@@ -6,17 +6,17 @@ S.WTDisable.off()
 */
 
 S.WTDisable = (function () {
-    const on = _ => {
+    var on = function () {
         listeners('add')
     }
 
-    const off = _ => {
+    var off = function () {
         listeners('remove')
     }
 
     function listeners (action) {
-        const isTouch = S.Sniffer.isTouch
-        const doc     = document
+        var isTouch = S.Sniffer.isTouch
+        var doc     = document
 
         if (isTouch) {
             S.Listen(doc, action, 'touchmove', prevent)

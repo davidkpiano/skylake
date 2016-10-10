@@ -6,10 +6,9 @@ const name = S.Selector.name(selector)
 
 */
 
-const Selector = class {
-
-    el (selector) {
-        let el = []
+S.Selector = (function () {
+    var el = function (selector) {
+        var el = []
         if (S.Is.string(selector)) {
             const elementName = selector.substring(1)
             if (selector.charAt(0) === '#') {
@@ -23,7 +22,7 @@ const Selector = class {
         return el
     }
 
-    type (selector) {
+    var type = function (selector) {
         if (selector.charAt(0) === '#') {
             return 'id'
         } else {
@@ -31,10 +30,13 @@ const Selector = class {
         }
     }
 
-    name (selector) {
+    var name = function (selector) {
         return selector.substring(1)
     }
 
-}
-
-S.Selector = new Selector()
+    return {
+        el: el,
+        type: type,
+        name: name
+    }
+}())

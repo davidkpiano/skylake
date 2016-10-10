@@ -9,13 +9,13 @@ rafIndex.cancel()
 
 */
 
-S.RafIndex = class {
+S.RafIndex = function () {
 
-    start (callback) {
+    this.start = function (callback) {
         this.rafCallback = S.Raf(callback)
     }
 
-    cancel () {
+    this.cancel = function () {
         window.cancelAnimationFrame(this.rafCallback)
     }
 }

@@ -6,44 +6,42 @@ const isTouch = S.Sniffer.isTouch
 
 */
 
-const Sniffer = class {
+S.Sniffer = {
 
-    constructor () {
-        this.uA = navigator.userAgent.toLowerCase()
-    }
+    uA: navigator.userAgent.toLowerCase(),
 
     get isFirefox () {
         return this.uA.indexOf('firefox') > -1
-    }
+    },
 
     get safari () {
         return this.uA.match(/version\/[\d\.]+.*safari/)
-    }
+    },
 
     get isSafari () {
         return !!this.safari
-    }
+    },
 
     get version () {
         if (this.isSafari) {
-            const versionWithVersion = this.safari[0].match(/version\/\d{1,2}/)
+            var versionWithVersion = this.safari[0].match(/version\/\d{1,2}/)
             return +versionWithVersion[0].split('/')[1]
         } else {
             // TODO : others
             return false
         }
-    }
+    },
 
     get isTouch () {
         return 'ontouchend' in window
-    }
+    },
 
     get isPageError () {
-        const meta  = S.Geb.tag('meta')
-        const metaL = meta.length
-        let hasMetaError = false
+        var meta  = S.Geb.tag('meta')
+        var metaL = meta.length
+        var hasMetaError = false
 
-        for (let i = 0; i < metaL; i++) {
+        for (var i = 0; i < metaL; i++) {
             if (meta[i].name === 'error') {
                 hasMetaError = true
                 break
@@ -52,7 +50,4 @@ const Sniffer = class {
 
         return hasMetaError
     }
-
 }
-
-S.Sniffer = new Sniffer()

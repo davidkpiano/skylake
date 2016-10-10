@@ -4,8 +4,8 @@ S.Delay(callback, delay)
 
 */
 
-S.Delay = (callback, delay) => {
-    window.setTimeout(_ => {
+S.Delay = function (callback, delay) {
+    window.setTimeout(function () {
         callback()
     }, delay)
 }

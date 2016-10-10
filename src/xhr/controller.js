@@ -11,15 +11,15 @@ function myCallback(response, args) {
 
 */
 
-S.Controller = (page, callback, args) => {
-    const path = 'index.php?url=' + page + '&xhr=true'
-    const xhr = new XMLHttpRequest()
+S.Controller = function (page, callback, args) {
+    var path = 'index.php?url=' + page + '&xhr=true'
+    var xhr = new XMLHttpRequest()
 
     xhr.open('GET', path, true)
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            const xhrController = JSON.parse(xhr.responseText).xhrController
+            var xhrController = JSON.parse(xhr.responseText).xhrController
 
             getHeadUpdate(xhrController)
             getHistoryUpdate()
@@ -30,24 +30,24 @@ S.Controller = (page, callback, args) => {
 
     // Head update
     function getHeadUpdate (xhrController) {
-        const cannonicalLink = S.Geb.tag('link')[0]
-        const titleTag       = S.Geb.tag('title')[0]
-        const metaTag        = S.Geb.tag('meta')
-        const metaTagL       = metaTag.length
-        const url            = xhrController.head.url
-        const title          = xhrController.head.title
-        const description    = xhrController.head.description
-        const keywords       = xhrController.head.keywords
+        var cannonicalLink = S.Geb.tag('link')[0]
+        var titleTag       = S.Geb.tag('title')[0]
+        var metaTag        = S.Geb.tag('meta')
+        var metaTagL       = metaTag.length
+        var url            = xhrController.head.url
+        var title          = xhrController.head.title
+        var description    = xhrController.head.description
+        var keywords       = xhrController.head.keywords
 
         cannonicalLink.href = url
 
         titleTag.textContent = title
 
-        for (let i = 0; i < metaTagL; i++) {
-            const meta         = metaTag[i]
-            const metaName     = meta.getAttribute('name')
-            const metaItemprop = meta.getAttribute('itemprop')
-            const metaProperty = meta.getAttribute('property')
+        for (var i = 0; i < metaTagL; i++) {
+            var meta         = metaTag[i]
+            var metaName     = meta.getAttribute('name')
+            var metaItemprop = meta.getAttribute('itemprop')
+            var metaProperty = meta.getAttribute('property')
 
             if (metaName) {
                 // Description
@@ -92,7 +92,7 @@ S.Controller = (page, callback, args) => {
 
     // Browser history update
     function getHistoryUpdate () {
-        const pageUrl = page === 'home' ? '/' : page
+        var pageUrl = page === 'home' ? '/' : page
 
         history.pushState({key: 'value'}, 'titre', pageUrl)
     }

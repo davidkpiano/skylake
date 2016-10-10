@@ -1,5 +1,4 @@
-const S = {
+var S = {
     Polyfill: {}
 }
-
-export default S
+module.exports = S

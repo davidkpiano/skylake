@@ -5,19 +5,25 @@ const isObject = S.Is.object(varToCheck)
 
 */
 
-const Is = class {
-
-    string (v) {
+S.Is = (function () {
+    var string = function (v) {
         return typeof v === 'string'
     }
 
-    object (v) {
+    var object = function (v) {
         return v === Object(v)
     }
 
-    array (v) {
+    var array = function (v) {
         v.constructor === Array
     }
+
+    return {
+        string: string,
+        object: object,
+        array: array
+    }
+}())
 
 /*
     DISABLE → BUG WITH ROLLUP
@@ -31,7 +37,3 @@ const Is = class {
             (nodes.length === 0 || (typeof nodes[0] === 'object' && nodes[0].nodeType > 0))
     }
 */
-
-}
-
-S.Is = new Is()

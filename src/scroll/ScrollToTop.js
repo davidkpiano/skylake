@@ -11,10 +11,10 @@ S.ScrollToTop(options)
 
 */
 
-S.ScrollToTop = options => {
-    const opts            = options
-    const currentPosition = S.Scrollable.scrollTop
-    const scrollToOptions = {
+S.ScrollToTop = function (options) {
+    var opts            = options
+    var currentPosition = S.Scrollable.scrollTop
+    var scrollToOptions = {
         destination: 0,
         duration: getDuration(),
         easing: getEasing(),
@@ -36,8 +36,8 @@ S.ScrollToTop = options => {
     }
 
     function getDuration () {
-        const coeff     = currentPosition / opts.totalHeight
-        const coeffEasing = (-Math.pow(2, -10 * coeff) + 1)
+        var coeff     = currentPosition / opts.totalHeight
+        var coeffEasing = (-Math.pow(2, -10 * coeff) + 1)
 
         switch (true) {
             case (currentPosition === 0):

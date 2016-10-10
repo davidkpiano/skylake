@@ -6,11 +6,11 @@ S.Listen(document, 'remove', 'touchmove', callback)
 
 */
 
-S.Listen = (element, action, type, callback) => {
-    const doc = document
-    const el  = S.Selector.el(element)
-    const elL = el.length
-    let listenType
+S.Listen = function (element, action, type, callback) {
+    var doc = document
+    var el  = S.Selector.el(element)
+    var elL = el.length
+    var listenType
 
     if (type === 'mouseWheel') {
         listenType = 'onwheel' in doc ? 'wheel' : doc.onmousewheel !== undefined ? 'mousewheel' : 'DOMMouseScroll'
@@ -20,7 +20,7 @@ S.Listen = (element, action, type, callback) => {
         listenType = type
     }
 
-    for (let i = 0; i < elL; i++) {
+    for (var i = 0; i < elL; i++) {
         el[i][action + 'EventListener'](listenType, callback)
     }
 }
