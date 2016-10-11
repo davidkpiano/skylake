@@ -21,27 +21,31 @@ S.MM = function (callback) {
     S.BindMaker(this, ['getRAF', 'run'])
 }
 
-S.MM.prototype.on = function () {
-    this.listeners('add')
-}
+S.MM.prototype = {
 
-S.MM.prototype.off = function () {
-    this.listeners('remove')
-}
+    on: function () {
+        this.listeners('add')
+    },
 
-S.MM.prototype.listeners = function (action) {
-    S.Listen(document, action, 'mousemove', this.getRAF)
-}
+    off: function () {
+        this.listeners('remove')
+    },
 
-S.MM.prototype.getRAF = function (event) {
-    this.event = event
+    listeners: function (action) {
+        S.Listen(document, action, 'mousemove', this.getRAF)
+    },
 
-    this.rafTicking.start(this.run)
-}
+    getRAF: function (event) {
+        this.event = event
 
-S.MM.prototype.run = function () {
-    this.posX = this.event.pageX
-    this.posY = this.event.pageY
+        this.rafTicking.start(this.run)
+    },
 
-    this.callback(this.posX, this.posY)
+    run: function () {
+        this.posX = this.event.pageX
+        this.posY = this.event.pageY
+
+        this.callback(this.posX, this.posY)
+    }
+
 }

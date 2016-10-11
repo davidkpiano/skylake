@@ -31,53 +31,58 @@ S.AnimatedLine = function (path) {
     this.merom = []
 }
 
-S.AnimatedLine.prototype.play = function (duration, easing, callback) {
-    this.type = 'play'
-    this.run(duration, easing, callback)
-}
+S.AnimatedLine.prototype = {
 
-S.AnimatedLine.prototype.reverse = function (duration, easing, callback) {
-    this.type = 'reverse'
-    this.run(duration, easing, callback)
-}
+    play: function (duration, easing, callback) {
+        this.type = 'play'
+        this.run(duration, easing, callback)
+    },
 
-S.AnimatedLine.prototype.run = function (duration, easing, callback) {
-    this.duration = duration
-    this.easing = easing
-    this.callback = callback
-    for (var i = 0; i < this.pathL; i++) {
-        this.animationLine(this.path[i], i)
+    reverse: function (duration, easing, callback) {
+        this.type = 'reverse'
+        this.run(duration, easing, callback)
+    },
+
+    run: function (duration, easing, callback) {
+        this.duration = duration
+        this.easing = easing
+        this.callback = callback
+        for (var i = 0; i < this.pathL; i++) {
+            this.animationLine(this.path[i], i)
+        }
+    },
+
+    pause: function (status) {
+        for (var i = 0; i < this.pathL; i++) {
+            this.merom[i].pause(status)
+        }
+    },
+
+    reset: function () {
+        for (var i = 0; i < this.pathL; i++) {
+            this.path[i].style = ''
+        }
+    },
+
+    animationLine: function (path, i) {
+        var pathLength = path.getTotalLength()
+        var start
+        var end
+        if (this.type === 'reverse') {
+            var pathSDO = path.style.strokeDashoffset
+            start = pathSDO.charAt(pathSDO.length - 1) === 'x' ? +pathSDO.substring(0, pathSDO.length - 2) : +pathSDO
+            end = pathLength
+        } else {
+            start = pathLength
+            end = 0
+        }
+
+        path.style.strokeDasharray = pathLength
+        path.style.opacity = 1
+
+        this.merom[i] = new S.Merom(path, 'strokeDashoffset', start, end, this.duration, this.easing, {callback: this.callback})
+        this.merom[i].play()
     }
+
 }
 
-S.AnimatedLine.prototype.pause = function (status) {
-    for (var i = 0; i < this.pathL; i++) {
-        this.merom[i].pause(status)
-    }
-}
-
-S.AnimatedLine.prototype.reset = function () {
-    for (var i = 0; i < this.pathL; i++) {
-        this.path[i].style = ''
-    }
-}
-
-S.AnimatedLine.prototype.animationLine = function (path, i) {
-    var pathLength = path.getTotalLength()
-    var start
-    var end
-    if (this.type === 'reverse') {
-        var pathSDO = path.style.strokeDashoffset
-        start = pathSDO.charAt(pathSDO.length - 1) === 'x' ? +pathSDO.substring(0, pathSDO.length - 2) : +pathSDO
-        end = pathLength
-    } else {
-        start = pathLength
-        end = 0
-    }
-
-    path.style.strokeDasharray = pathLength
-    path.style.opacity = 1
-
-    this.merom[i] = new S.Merom(path, 'strokeDashoffset', start, end, this.duration, this.easing, {callback: this.callback})
-    this.merom[i].play()
-}

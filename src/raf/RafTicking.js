@@ -15,21 +15,25 @@ S.RafTicking = function () {
     S.BindMaker(this, ['getCallback'])
 }
 
-S.RafTicking.prototype.start = function (callback) {
-    this.callback = callback
+S.RafTicking.prototype = {
 
-    if (!this.ticking) {
-        this.ticking = true
-        this.rafIndex.start(this.getCallback)
+    start: function (callback) {
+        this.callback = callback
+
+        if (!this.ticking) {
+            this.ticking = true
+            this.rafIndex.start(this.getCallback)
+        }
+    },
+
+    getCallback: function () {
+        this.callback()
+        this.destroy()
+    },
+
+    destroy: function () {
+        this.rafIndex.cancel()
+        this.ticking = false
     }
-}
 
-S.RafTicking.prototype.getCallback = function () {
-    this.callback()
-    this.destroy()
-}
-
-S.RafTicking.prototype.destroy = function () {
-    this.rafIndex.cancel()
-    this.ticking = false
 }

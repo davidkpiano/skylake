@@ -17,45 +17,49 @@ S.Timeline = function () {
     }
 }
 
-S.Timeline.prototype.from = function (element, prop, start, end, duration, easing, opts) {
-    if (this.contentL() > 0) {
-        var opts = opts || {}
-        var prevTimelineDelay = this.content[this.contentL() - 1].delay
-        var arg4isObj = duration && S.Is.object(duration)
-        if (arg4isObj && duration.delay) {
-            duration.delay = prevTimelineDelay + duration.delay
-        } else if (arg4isObj) {
-            duration.delay = prevTimelineDelay
-        } else if (opts.delay) {
-            opts.delay = prevTimelineDelay + opts.delay
-        } else {
-            opts.delay = prevTimelineDelay
+S.Timeline.prototype = {
+
+    from: function (element, prop, start, end, duration, easing, opts) {
+        if (this.contentL() > 0) {
+            var opts = opts || {}
+            var prevTimelineDelay = this.content[this.contentL() - 1].delay
+            var arg4isObj = duration && S.Is.object(duration)
+            if (arg4isObj && duration.delay) {
+                duration.delay = prevTimelineDelay + duration.delay
+            } else if (arg4isObj) {
+                duration.delay = prevTimelineDelay
+            } else if (opts.delay) {
+                opts.delay = prevTimelineDelay + opts.delay
+            } else {
+                opts.delay = prevTimelineDelay
+            }
+        }
+
+        this.content.push(new S.Merom(element, prop, start, end, duration, easing, opts))
+    },
+
+    play: function () {
+        for (var i = 0; i < this.contentL(); i++) {
+            this.content[i].play()
+        }
+    },
+
+    pause: function (status) {
+        for (var i = 0; i < this.contentL(); i++) {
+            this.content[i].pause(status)
+        }
+    },
+
+    reverse: function () {
+        for (var i = 0; i < this.contentL(); i++) {
+            this.content[i].reverse(Array.from(arguments))
+        }
+    },
+
+    reset: function (opts) {
+        for (var i = 0; i < this.contentL(); i++) {
+            this.content[i].reset(opts)
         }
     }
 
-    this.content.push(new S.Merom(element, prop, start, end, duration, easing, opts))
-}
-
-S.Timeline.prototype.play = function () {
-    for (var i = 0; i < this.contentL(); i++) {
-        this.content[i].play()
-    }
-}
-
-S.Timeline.prototype.pause = function (status) {
-    for (var i = 0; i < this.contentL(); i++) {
-        this.content[i].pause(status)
-    }
-}
-
-S.Timeline.prototype.reverse = function () {
-    for (var i = 0; i < this.contentL(); i++) {
-        this.content[i].reverse(Array.from(arguments))
-    }
-}
-
-S.Timeline.prototype.reset = function (opts) {
-    for (var i = 0; i < this.contentL(); i++) {
-        this.content[i].reset(opts)
-    }
 }

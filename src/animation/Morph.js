@@ -28,74 +28,78 @@ S.Morph = function (opts) {
     S.BindMaker(this, ['getRaf', 'loop'])
 }
 
-S.Morph.prototype.play = function () {
-    var delay = this.opts.delay ? this.opts.delay : 0
-    S.Delay(this.getRaf, delay)
-}
+S.Morph.prototype = {
 
-S.Morph.prototype.pause = function () {
-    this.isPaused = true
-}
+    play: function () {
+        var delay = this.opts.delay ? this.opts.delay : 0
+        S.Delay(this.getRaf, delay)
+    },
 
-S.Morph.prototype.getRaf = function () {
-    this.startTime = S.Win.perfNow
-    this.raf.start(this.loop)
-}
+    pause: function () {
+        this.isPaused = true
+    },
 
-S.Morph.prototype.loop = function () {
-    if (this.isPaused) return
+    getRaf: function () {
+        this.startTime = S.Win.perfNow
+        this.raf.start(this.loop)
+    },
 
-    var currentTime      = S.Win.perfNow
-    var multiplier       = (currentTime - this.startTime) / this.opts.duration
-    var multiplierT      = multiplier > 1 ? 1 : multiplier // T → ternary
-    var easingMultiplier = S.Easing[this.opts.easing](multiplierT)
+    loop: function () {
+        if (this.isPaused) return
 
-    var update = []
-    var coordsUpdate = ''
+        var currentTime      = S.Win.perfNow
+        var multiplier       = (currentTime - this.startTime) / this.opts.duration
+        var multiplierT      = multiplier > 1 ? 1 : multiplier // T → ternary
+        var easingMultiplier = S.Easing[this.opts.easing](multiplierT)
 
-    for (var i = 0; i < this.coordsStart.length; i++) {
-        update[i] = this.isLetter(this.coordsStart[i]) ? this.coordsStart[i] + ' ' : S.Lerp.init(+this.coordsStart[i], +this.coordsEnd[i], easingMultiplier)
-        coordsUpdate += update[i]
+        var update = []
+        var coordsUpdate = ''
 
-        if (i !== this.coordsStart.length - 1) {
-            if (coordsUpdate.charAt(coordsUpdate.length - 1) === ',') {
-                coordsUpdate += ' '
-            } else {
-                coordsUpdate += ','
+        for (var i = 0; i < this.coordsStart.length; i++) {
+            update[i] = this.isLetter(this.coordsStart[i]) ? this.coordsStart[i] + ' ' : S.Lerp.init(+this.coordsStart[i], +this.coordsEnd[i], easingMultiplier)
+            coordsUpdate += update[i]
+
+            if (i !== this.coordsStart.length - 1) {
+                if (coordsUpdate.charAt(coordsUpdate.length - 1) === ',') {
+                    coordsUpdate += ' '
+                } else {
+                    coordsUpdate += ','
+                }
             }
         }
-    }
 
-    this.opts.element.setAttribute(this.type, coordsUpdate)
+        this.opts.element.setAttribute(this.type, coordsUpdate)
 
-    if (easingMultiplier < 1) {
-        this.raf.start(this.loop)
-    } else {
-        this.raf.cancel()
-        this.opts.element.setAttribute(this.type, this.opts.newCoords)
-        this.getCallback()
-    }
-}
+        if (easingMultiplier < 1) {
+            this.raf.start(this.loop)
+        } else {
+            this.raf.cancel()
+            this.opts.element.setAttribute(this.type, this.opts.newCoords)
+            this.getCallback()
+        }
+    },
 
-S.Morph.prototype.getCoordsArr = function (coords) {
-    var coordsSplit = coords.split(' ')
-    var coordsArr = []
-    for (var i = 0; i < coordsSplit.length; i++) {
-        var coordsSplit2 = coordsSplit[i].split(',')
-        for (var j = 0; j < coordsSplit2.length; j++) {
-            coordsArr.push(coordsSplit2[j])
+    getCoordsArr: function (coords) {
+        var coordsSplit = coords.split(' ')
+        var coordsArr = []
+        for (var i = 0; i < coordsSplit.length; i++) {
+            var coordsSplit2 = coordsSplit[i].split(',')
+            for (var j = 0; j < coordsSplit2.length; j++) {
+                coordsArr.push(coordsSplit2[j])
+            }
+        }
+        return coordsArr
+    },
+
+    isLetter: function (varToCheck) {
+        return (varToCheck === 'M' || varToCheck === 'L' || varToCheck === 'C' || varToCheck === 'Z')
+    },
+
+    getCallback: function () {
+        if (this.opts.callback) {
+            var delay = this.opts.callbackDelay ? this.opts.callbackDelay : 0
+            S.Delay(this.opts.callback, delay)
         }
     }
-    return coordsArr
-}
 
-S.Morph.prototype.isLetter = function (varToCheck) {
-    return (varToCheck === 'M' || varToCheck === 'L' || varToCheck === 'C' || varToCheck === 'Z')
-}
-
-S.Morph.prototype.getCallback = function () {
-    if (this.opts.callback) {
-        var delay = this.opts.callbackDelay ? this.opts.callbackDelay : 0
-        S.Delay(this.opts.callback, delay)
-    }
 }

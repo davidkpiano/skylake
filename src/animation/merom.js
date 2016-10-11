@@ -81,186 +81,190 @@ S.Merom = function (element, prop, start, end, duration, easing, opts) {
     S.BindMaker(this, ['getRaf', 'loop'])
 }
 
-S.Merom.prototype.play = function () {
-    var self = this
-    S.Delay(function () {
-        self.isPaused = false
-        self.getRaf()
-    }, self.delay)
-}
+S.Merom.prototype = {
 
-S.Merom.prototype.pause = function (status) {
-    if (status === 'on') {
-        this.isPaused = true
-        this.deltaTimeSave = this.deltaTime
-    } else {
-        this.deltaTimeAtPause = this.deltaTimeSave
-        this.delay = 0
-        this.play()
-    }
-}
+    play: function () {
+        var self = this
+        S.Delay(function () {
+            self.isPaused = false
+            self.getRaf()
+        }, self.delay)
+    },
 
-S.Merom.prototype.reverse = function (duration, easing, opts) {
-    this.pause('on')
-
-    if (S.Is.object(duration)) {
-        this.opts = duration
-    } else {
-        this.duration = duration || this.duration
-        this.easing = easing || this.easing
-        this.opts = opts || false
-    }
-
-    this.getReset()
-}
-
-S.Merom.prototype.reset = function (opts) {
-    this.pause('on')
-
-    this.duration = 0
-    this.easing = 'linear'
-    this.opts = opts || false
-
-    this.getReset()
-}
-
-S.Merom.prototype.getRaf = function () {
-    this.startTime = S.Win.perfNow
-    this.raf.start(this.loop)
-}
-
-S.Merom.prototype.loop = function () {
-    if (this.isPaused) return
-
-    var currentTime = S.Win.perfNow
-    this.deltaTime = currentTime - this.startTime + this.deltaTimeAtPause
-    var multiplier = this.deltaTime / this.duration
-    var multiplierT = multiplier > 1 ? 1 : multiplier // T → ternary
-    var easingMultiplier = this.EasingLibrary[this.easing](multiplierT)
-
-    if (this.isNotMultipleT) {
-        this.value = S.Lerp.init(+this.start, +this.end, easingMultiplier)
-    } else {
-        this.value = []
-        for (var i = 0; i < this.updateQty; i++) {
-            this.value[i] = S.Lerp.init(+this.start[i], +this.end[i], easingMultiplier)
-        }
-    }
-
-    this.update(this.value)
-
-    if (multiplierT < 1) {
-        this.raf.start(this.loop)
-    } else {
-        this.raf.cancel()
-        this.update(this.end)
-        if (this.opts.callback) {
-            S.Delay(this.opts.callback, this.callbackDelay)
-        }
-    }
-}
-
-S.Merom.prototype.selectUpdateType = function () {
-    if (S.Is.array(this.prop)) {
-        this.isNotMultipleT = false
-        this.updateQty = this.prop.length
-        this.update = this.multipleT
-    } else {
-        switch (this.prop) {
-            case '3dx':
-            case '3dy':
-            case 'scale':
-            case 'rotate':
-                this.update = this.simpleT
-                break
-            case 'scrollTop':
-                this.update = this.setScrollTop
-                break
-            default:
-                this.update = this.setStyle
-        }
-        this.isNotMultipleT = true
-    }
-}
-
-S.Merom.prototype.multipleT = function (value) {
-    var t3dx = 0
-    var t3dy = 0
-    var rotate = ''
-    var scale = ''
-
-    for (var i = 0; i < this.updateQty; i++) {
-        if (this.prop[i] === '3dx') {
-            t3dx = value[i] + this.t3dUnit(this.start[i])
-        } else if (this.prop[i] === '3dy') {
-            t3dy = value[i] + this.t3dUnit(this.start[i])
-        } else if (this.prop[i] === 'rotate') {
-            rotate = 'rotate(' + value[i] + 'deg)'
-        } else if (this.prop[i] === 'scale') {
-            scale = 'scale(' + value[i] + ')'
-        }
-    }
-
-    var translate3d = 'translate3d(' + t3dx + ',' + t3dy + ',0)'
-    var multipleTransform = translate3d + ' ' + rotate + ' ' + scale
-
-    this.updateDom('transform', multipleTransform)
-}
-
-S.Merom.prototype.simpleT = function (value) {
-    var transformValue
-    if (this.prop === '3dx' || this.prop === '3dy') {
-        var valueUnit = value + this.t3dUnit(this.start)
-        var translate = this.prop === '3dx' ? valueUnit + ',0' : '0,' + valueUnit
-        transformValue = 'translate3d(' + translate + ',0)'
-    } else if (this.prop === 'rotate') {
-        transformValue = 'rotate(' + value + 'deg)'
-    } else {
-        transformValue = 'scale(' + value + ')'
-    }
-
-    this.updateDom('transform', transformValue)
-}
-
-S.Merom.prototype.setScrollTop = function (value) {
-    this.element[this.prop] = value
-
-    if (this.opts.during) {
-        this.opts.during(value)
-    }
-}
-
-S.Merom.prototype.setStyle = function (value) {
-    this.updateDom(this.prop, value)
-}
-
-S.Merom.prototype.updateDom = function (prop, value) {
-    for (var i = 0; i < this.elL; i++) {
-        if (prop === 'transform') {
-            this.el[i].style.webkitTransform = value
-            this.el[i].style.transform = value
-        } else if (prop === 'x' || prop === 'y' || prop === 'r') {
-            this.el[i].setAttribute(prop, value)
+    pause: function (status) {
+        if (status === 'on') {
+            this.isPaused = true
+            this.deltaTimeSave = this.deltaTime
         } else {
-            this.el[i].style[prop] = value
+            this.deltaTimeAtPause = this.deltaTimeSave
+            this.delay = 0
+            this.play()
         }
+    },
+
+    reverse: function (duration, easing, opts) {
+        this.pause('on')
+
+        if (S.Is.object(duration)) {
+            this.opts = duration
+        } else {
+            this.duration = duration || this.duration
+            this.easing = easing || this.easing
+            this.opts = opts || false
+        }
+
+        this.getReset()
+    },
+
+    reset: function (opts) {
+        this.pause('on')
+
+        this.duration = 0
+        this.easing = 'linear'
+        this.opts = opts || false
+
+        this.getReset()
+    },
+
+    getRaf: function () {
+        this.startTime = S.Win.perfNow
+        this.raf.start(this.loop)
+    },
+
+    loop: function () {
+        if (this.isPaused) return
+
+        var currentTime = S.Win.perfNow
+        this.deltaTime = currentTime - this.startTime + this.deltaTimeAtPause
+        var multiplier = this.deltaTime / this.duration
+        var multiplierT = multiplier > 1 ? 1 : multiplier // T → ternary
+        var easingMultiplier = this.EasingLibrary[this.easing](multiplierT)
+
+        if (this.isNotMultipleT) {
+            this.value = S.Lerp.init(+this.start, +this.end, easingMultiplier)
+        } else {
+            this.value = []
+            for (var i = 0; i < this.updateQty; i++) {
+                this.value[i] = S.Lerp.init(+this.start[i], +this.end[i], easingMultiplier)
+            }
+        }
+
+        this.update(this.value)
+
+        if (multiplierT < 1) {
+            this.raf.start(this.loop)
+        } else {
+            this.raf.cancel()
+            this.update(this.end)
+            if (this.opts.callback) {
+                S.Delay(this.opts.callback, this.callbackDelay)
+            }
+        }
+    },
+
+    selectUpdateType: function () {
+        if (S.Is.array(this.prop)) {
+            this.isNotMultipleT = false
+            this.updateQty = this.prop.length
+            this.update = this.multipleT
+        } else {
+            switch (this.prop) {
+                case '3dx':
+                case '3dy':
+                case 'scale':
+                case 'rotate':
+                    this.update = this.simpleT
+                    break
+                case 'scrollTop':
+                    this.update = this.setScrollTop
+                    break
+                default:
+                    this.update = this.setStyle
+            }
+            this.isNotMultipleT = true
+        }
+    },
+
+    multipleT: function (value) {
+        var t3dx = 0
+        var t3dy = 0
+        var rotate = ''
+        var scale = ''
+
+        for (var i = 0; i < this.updateQty; i++) {
+            if (this.prop[i] === '3dx') {
+                t3dx = value[i] + this.t3dUnit(this.start[i])
+            } else if (this.prop[i] === '3dy') {
+                t3dy = value[i] + this.t3dUnit(this.start[i])
+            } else if (this.prop[i] === 'rotate') {
+                rotate = 'rotate(' + value[i] + 'deg)'
+            } else if (this.prop[i] === 'scale') {
+                scale = 'scale(' + value[i] + ')'
+            }
+        }
+
+        var translate3d = 'translate3d(' + t3dx + ',' + t3dy + ',0)'
+        var multipleTransform = translate3d + ' ' + rotate + ' ' + scale
+
+        this.updateDom('transform', multipleTransform)
+    },
+
+    simpleT: function (value) {
+        var transformValue
+        if (this.prop === '3dx' || this.prop === '3dy') {
+            var valueUnit = value + this.t3dUnit(this.start)
+            var translate = this.prop === '3dx' ? valueUnit + ',0' : '0,' + valueUnit
+            transformValue = 'translate3d(' + translate + ',0)'
+        } else if (this.prop === 'rotate') {
+            transformValue = 'rotate(' + value + 'deg)'
+        } else {
+            transformValue = 'scale(' + value + ')'
+        }
+
+        this.updateDom('transform', transformValue)
+    },
+
+    setScrollTop: function (value) {
+        this.element[this.prop] = value
+
+        if (this.opts.during) {
+            this.opts.during(value)
+        }
+    },
+
+    setStyle: function (value) {
+        this.updateDom(this.prop, value)
+    },
+
+    updateDom: function (prop, value) {
+        for (var i = 0; i < this.elL; i++) {
+            if (prop === 'transform') {
+                this.el[i].style.webkitTransform = value
+                this.el[i].style.transform = value
+            } else if (prop === 'x' || prop === 'y' || prop === 'r') {
+                this.el[i].setAttribute(prop, value)
+            } else {
+                this.el[i].style[prop] = value
+            }
+        }
+    },
+
+    delaysInit: function () {
+        this.delay = this.opts.delay || 0
+        this.callbackDelay = this.opts.callbackDelay || 0
+    },
+
+    getReset: function () {
+        this.end = this.start
+        this.start = S.Is.string(this.start) ? String(this.value) : this.value
+
+        this.delaysInit()
+
+        this.play()
+    },
+
+    t3dUnit: function (valueToCheck) {
+        return S.Is.string(valueToCheck) ? 'px' : '%'
     }
-}
 
-S.Merom.prototype.delaysInit = function () {
-    this.delay = this.opts.delay || 0
-    this.callbackDelay = this.opts.callbackDelay || 0
-}
-
-S.Merom.prototype.getReset = function () {
-    this.end = this.start
-    this.start = S.Is.string(this.start) ? String(this.value) : this.value
-
-    this.delaysInit()
-
-    this.play()
-}
-
-S.Merom.prototype.t3dUnit = function (valueToCheck) {
-    return S.Is.string(valueToCheck) ? 'px' : '%'
 }

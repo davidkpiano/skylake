@@ -31,34 +31,38 @@ S.Scroll = function (options) {
     this.rafTicking = new S.RafTicking()
 }
 
-S.Scroll.prototype.on = function () {
-    this.startScrollY = this.scrollable.scrollTop
+S.Scroll.prototype = {
 
-    this.listeners('add')
-}
+    on: function () {
+        this.startScrollY = this.scrollable.scrollTop
 
-S.Scroll.prototype.off = function () {
-    this.listeners('remove')
-}
+        this.listeners('add')
+    },
 
-S.Scroll.prototype.listeners = function (action) {
-    S.Listen(window, action, 'scroll', this.getThrottle)
-}
+    off: function () {
+        this.listeners('remove')
+    },
 
-S.Scroll.prototype.getThrottle = function () {
-    this.throttle.init()
-}
+    listeners: function (action) {
+        S.Listen(window, action, 'scroll', this.getThrottle)
+    },
 
-S.Scroll.prototype.getRAF = function () {
-    this.rafTicking.start(this.run)
-}
+    getThrottle: function () {
+        this.throttle.init()
+    },
 
-S.Scroll.prototype.run = function () {
-    var currentScrollY = this.scrollable.scrollTop
-    var delta          = -(currentScrollY - this.startScrollY)
+    getRAF: function () {
+        this.rafTicking.start(this.run)
+    },
 
-    // Reset start scroll y
-    this.startScrollY = currentScrollY
+    run: function () {
+        var currentScrollY = this.scrollable.scrollTop
+        var delta          = -(currentScrollY - this.startScrollY)
 
-    this.opts.callback(currentScrollY, delta)
+        // Reset start scroll y
+        this.startScrollY = currentScrollY
+
+        this.opts.callback(currentScrollY, delta)
+    }
+
 }

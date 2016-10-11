@@ -27,26 +27,30 @@ S.RO = function (options) {
     this.rafTicking = new S.RafTicking()
 }
 
-S.RO.prototype.on = function () {
-    this.listeners('add')
-}
+S.RO.prototype = {
 
-S.RO.prototype.off = function () {
-    this.listeners('remove')
-}
+    on: function () {
+        this.listeners('add')
+    },
 
-S.RO.prototype.listeners = function (action) {
-    if (this.isTouch) {
-        S.Listen(window, action, 'orientationchange', this.getThrottle)
-    } else {
-        S.Listen(window, action, 'resize', this.getThrottle)
+    off: function () {
+        this.listeners('remove')
+    },
+
+    listeners: function (action) {
+        if (this.isTouch) {
+            S.Listen(window, action, 'orientationchange', this.getThrottle)
+        } else {
+            S.Listen(window, action, 'resize', this.getThrottle)
+        }
+    },
+
+    getThrottle: function () {
+        this.throttle.init()
+    },
+
+    getRAF: function () {
+        this.rafTicking.start(this.opts.callback)
     }
-}
 
-S.RO.prototype.getThrottle = function () {
-    this.throttle.init()
-}
-
-S.RO.prototype.getRAF = function () {
-    this.rafTicking.start(this.opts.callback)
 }
