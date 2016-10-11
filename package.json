@@ -26,4 +26,3 @@
         "push": "bash build/bash/push.sh"
     }
 }
-
