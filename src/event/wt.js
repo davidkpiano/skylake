@@ -87,14 +87,14 @@ S.WT.prototype = {
     touchStart: function (event) {
         event.preventDefault()
 
-        this.start = this.event.targetTouches[0].pageY
+        this.start = event.targetTouches[0].pageY
     },
 
     touchMove: function (event) {
         event.preventDefault()
 
         this.type = 'touch'
-        this.delta = (this.event.targetTouches[0].pageY - this.start)
+        this.delta = event.targetTouches[0].pageY - this.start
 
         this.getCallback()
     },
