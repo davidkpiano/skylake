@@ -22,6 +22,11 @@ S.Sniffer = {
         return !!this.safari
     },
 
+    get isFacebookApp () {
+        const ua = navigator.userAgent || navigator.vendor || window.opera
+        return (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1)
+    },
+
     get version () {
         if (this.isSafari) {
             var versionWithVersion = this.safari[0].match(/version\/\d{1,2}/)
