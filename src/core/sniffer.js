@@ -10,6 +10,11 @@ S.Sniffer = {
 
     uA: navigator.userAgent.toLowerCase(),
 
+    get isAndroid  () {
+        const isDroidPhone = /android.*mobile/.test(this.uA)
+        return isDroidPhone || !isDroidPhone && (/android/i).test(this.uA)
+    },
+
     get isFirefox () {
         return this.uA.indexOf('firefox') > -1
     },
@@ -19,12 +24,7 @@ S.Sniffer = {
     },
 
     get isSafari () {
-        return !!this.safari
-    },
-
-    get isFacebookApp () {
-        const ua = navigator.userAgent || navigator.vendor || window.opera
-        return (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1)
+        return !!this.safari && !this.isAndroid
     },
 
     get version () {
